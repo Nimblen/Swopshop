@@ -34,7 +34,7 @@
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center h-100">
                     <a class="text-body mr-3" href="">About</a>
-                    <a class="text-body mr-3" href="">Contact</a>
+                    <a class="text-body mr-3" href="{% url 'catalog:add_message' %}">Contact</a>
                     <a class="text-body mr-3" href="">Help</a>
                     <a class="text-body mr-3" href="">FAQs</a>
                 </div>
@@ -44,8 +44,13 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                         <div class="dropdown-menu dropdown-menu-right">
+                            {% if user.is_authenticated %}
+                            <a class="dropdown-item" href="{% url 'users:profile' %}" type="button">Profile</a>
+                            <a class="dropdown-item" href="{% url 'users:logout' %}" type="button">Log out</a>
+                            {% else %}
                             <a class="dropdown-item" href="{% url 'users:login' %}" type="button">Sign in</a>
                             <a class="dropdown-item" href="{% url 'users:registration' %}" type="button">Sign up</a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="btn-group mx-2">
@@ -156,7 +161,7 @@
                                     <a href="checkout.html" class="dropdown-item">Checkout</a>
                                 </div>
                             </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="{% url 'catalog:add_message' %}" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                             <a href="" class="btn px-0">
@@ -240,8 +245,8 @@
                 <p class="mb-md-0 text-center text-md-left text-secondary">
                     &copy; <a class="text-primary" href="#">Domain</a>. All Rights Reserved. Designed
                     by
-                    <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>
-                    <br>Distributed By: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                    <a class="text-primary" href="https://github.com/Nimblen">NimBLen</a>
+                    <br>Distributed By: <a href="https://github.com/Nimblen" target="_blank">NimBLen</a>
                 </p>
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">

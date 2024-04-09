@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Exchange, Photo_of_item, Category
+from .models import Item, Exchange, Photo_of_item, Category, Message, Comment
 # Register your models here.
 
 
@@ -11,8 +11,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ['name', 'user', 'add_time', 'сategory', 'type']
-    list_filter = ['name', 'user', 'add_time']
+    list_display = ['name', 'seller', 'add_time', 'сategory', 'type']
+    list_filter = ['name', 'seller', 'add_time']
+    prepopulated_fields = {'slug': ('name',)}
 
 
 
@@ -29,3 +30,14 @@ class ItemPhotoAdmin(admin.ModelAdmin):
     list_display = ('item',)
 
 
+@admin.register(Message)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'user', 'created')
+    list_filter = ('name', 'user', 'created')
+    
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'item', 'created', 'active']
+    list_filter = ['active', 'created', 'updated']
+    search_fields = ['user', 'body']

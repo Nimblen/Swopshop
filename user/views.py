@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth, messages
@@ -31,7 +32,9 @@ def registration(request):
     if request.method == 'POST':
         form = UserRegistrationForm(data = request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.ip_address  = request.META.get("REMOTE_ADDR")
+            user.save()
             messages.success(request, 'Регистрация прошла успешно!')
             return HttpResponseRedirect(reverse('users:login'))
     else:
@@ -42,20 +45,42 @@ def registration(request):
 
 
 
-# @login_required
-# def profile(request):
-#     if request.method == 'POST':
-#         form = UserProfileForm( instance=request.user, data = request.POST, files=request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect(reverse('users:profile'))
-#     else:
-#         form = UserProfileForm(instance=request.user)
-#     context = { 'form':form,
-#                 'my_items':Item.objects.filter(user=request.user),
-#                 'exchange': Exchange.objects.filter(user=request.user)
-#                 }
-#     return render(request, 'users/profile.html', context)
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(instance=request.user, data = request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('users:profile'))
+    else:
+        form = UserProfileForm(instance=request.user)
+    context = { 'form':form,
+                'my_items':Item.objects.filter(user=request.user),
+                'exchange': Exchange.objects.filter(user=request.user)
+                }
+    return render(request, 'user/profile.html', context)
+def process_action(request):
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'accept':
+            # выполнить действие успешно
+            return JsonResponse({'message': 'Действие выполнено успешно'})
+        if action == 'remove':
+            # выполнить действие с ошибкой
+            return JsonResponse({'message': 'Действие выполнено с ошибкой'})
+    
+    return JsonResponse({'message': 'Ошибка: Неверный запрос'})
+    
+
+def exchanges(request):
+    exchanges = Exchange.objects.filter(sent_item__seller=request.user)
+
+    context = { 'exchanges': exchanges
+
+                }
+    return render(request, 'user/exchanges.html', context)
+
+
 
 
 
