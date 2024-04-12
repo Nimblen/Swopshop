@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load shoptags %}
 
 {% block content %}
 <div class="container-fluid">
@@ -19,39 +20,39 @@
     <div class="row px-xl-5">
         <div class="col-md-6">
             <div class="product-offer mb-30" style="height: 300px;">
-                <img class="img-fluid" src="/static/img/offer-1.jpg" alt="">
+                <img class="img-fluid" src="{% if received_item.images.all %}{{received_item.get_first_phone}}{% else %}{% static "img/default_item.jpg" %}{% endif %}" alt="">
                 <div class="offer-text">
-                    <h6 class="text-white text-uppercase">Save 20%</h6>
-                    <h3 class="text-white mb-3">Special Offer</h3>
-                    <a href="" class="btn btn-primary">Shop Now</a>
+                    <h6 class="text-white text-uppercase">{{received_item.seller}}</h6>
+                    <h3 class="text-white mb-3">{{ received_item.name }}</h3>
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="product-offer mb-30" style="height: 300px;">
-                <img class="img-fluid" src="/static/img/offer-2.jpg" alt="">
+                <img class="img-fluid" src="{% if sent_item.images.all %}{{sent_item.get_first_photo}}{% else %}{% static "img/default_item.jpg" %}{% endif %}" alt="">
                 <div class="offer-text">
-                    <h6 class="text-white text-uppercase">username</h6>
-                    <h3 class="text-white mb-3">name</h3>
-                    <button class="btn btn-primary" id="shopNowBtn" >Shop Now</button>
+                    <h6 class="text-white text-uppercase">{{sent_item.seller}}</h6>
+                    <h3 class="text-white mb-3">{{ sent_item.name }}</h3>
+                    <button class="btn btn-primary" id="shopNowBtn" >select lot</button>
                 </div>
             </div>
             <div id="productList" style="display: none;">
-
+                    {% for si in sent_items %}
                     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <a class="text-decoration-none" href="">
+                        <a class="text-decoration-none" href="?{% change_params SI_id=si.id %}">
                             <div class="cat-item d-flex align-items-center mb-4">
                                 <div class="overflow-hidden" style="width: 100px; height: 100px;">
                                     <div class="flex-fill pl-3">
-                                        <h6>Category </h6>
+                                        <h6>{{si.name}} </h6>
                                     
-                                    <img class="img-fluid" src="{% static 'img/cat-1.jpg' %}" alt="">
+                                    <img class="img-fluid" src="{% if si.images.all %}{{ si.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
                                 </div>
                             </div>
                             </div>
                         </a>
                     </div>
-            
+                    {% endfor %}
                 
                 
             </div>

@@ -55,10 +55,10 @@ def profile(request):
     else:
         form = UserProfileForm(instance=request.user)
     context = { 'form':form,
-                'my_items':Item.objects.filter(user=request.user),
-                'exchange': Exchange.objects.filter(user=request.user)
+                'my_items':Item.objects.filter(seller=request.user),
+                'exchange': Exchange.objects.filter(sent_item__seller=request.user)
                 }
-    return render(request, 'user/profile.html', context)
+    return render(request, 'user/checkout.html', context)
 def process_action(request):
     if request.method == 'POST':
         action = request.POST.get('action')

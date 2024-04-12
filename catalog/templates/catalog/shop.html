@@ -7,9 +7,8 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                    <span class="breadcrumb-item active">Shop List</span>
+                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
+                    <span class="breadcrumb-item text-dark">Shop</span>
                 </nav>
             </div>
         </div>
@@ -24,11 +23,12 @@
             <div class="col-lg-3 col-md-4">
             <h3> Your lots </h>
                 {% if user.is_authenticated %}
+                {% if my_lots.count > 0 %}
                 {% for my_lot in my_lots %}
                     <div class="product-item bg-light mb-4">
                         <div class="product-img position-relative overflow-hidden">
                             
-                            <img class="img-fluid" src="{{ my_lot.get_first_photo }}" alt="">
+                            <img class="img-fluid" src="{% if my_lot.images.all %}{{ my_lot.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
                             
                             <div class="product-action">
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -44,6 +44,16 @@
                         </div>
                 </div>
                 {% endfor %}
+                {% else  %}
+                <div class="text-center py-4">
+                    <div class="h6 text-decoration-none text-truncate" href="">You have no lots</div>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="text-center py-4">
+                    <div class="h6 text-decoration-none text-truncate" href="">log in to add a lot</div>
+                </div>
+                <br><a href="{% url 'users:login' %}" class="btn btn-primary px-3">Login to add a lot</a>
                 {% endif %}  
             </div>
             <!-- Shop Sidebar End -->
@@ -54,19 +64,16 @@
                 <div class="row pb-3">
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div>
-                                <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
-                                <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>
-                            </div>
+
                             <div class="ml-2">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Latest</a>
-                                        <a class="dropdown-item" href="#">Popularity</a>
-                                        <a class="dropdown-item" href="#">Best Rating</a>
+                                        <a class="dropdown-item" href="?{% change_params sort_by="-date"%}">Latest</a>
+                                        <a class="dropdown-item" href="?{% change_params sort_by="date"%}">Oldest</a>
                                     </div>
                                 </div>
+                                
                                 <div class="btn-group ml-2">
                                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
                                     <div class="dropdown-menu dropdown-menu-right">
@@ -75,14 +82,24 @@
                                         <a class="dropdown-item" href="?{% change_params per_page=30 %}">30</a>
                                     </div>
                                 </div>
+                                <div class="btn-group ml-2">
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Type</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="?{% change_params type_by="all" %}">all</a>
+                                        <a class="dropdown-item" href="?{% change_params type_by="item" %}">item</a>
+                                        <a class="dropdown-item" href="?{% change_params type_by="service" %}">service</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
                     {% for item in items %}
                     <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid" src="{{ item.get_first_photo }}" alt="">
+                                <img class="img-fluid" src="{% if item.images.all %}{{ item.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
+
                                 <div class="product-action">
                                     <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
@@ -98,6 +115,13 @@
                         </div>
                     </div>
                     {% endfor %}
+                   
+                    <div class="col-12">
+                        <div class="text-center py-4">
+                            <div class="h6 text-decoration-none text-truncate" href="">No lots yet</div>
+                        </div>
+                    </div>
+                    
                     <div class="col-12">
                     {% include "catalog/includes/paginator.html" %} 
                     </div>
