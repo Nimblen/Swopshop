@@ -18,69 +18,6 @@
         $(window).resize(toggleNavbarMethod);
     });
 
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Ищем CSRF токен
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    
-    var csrftoken = getCookie('csrftoken');
-    $('.btn-danger').click(function() {
-
-        $.ajax({
-            url: '/user/process-action/',
-            type: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken
-            },
-            dataType: 'json',
-            data: {
-                'action':'remove'
-            },
-            success: function(response) {
-                console.log(data)
-                alert(response.message);
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(xhr.status + ": " + xhr.responseText); 
-    
-            }
-        });
-    });
-
-    $('.btn-success').click(function() {
-        $.ajax({
-            url: '/user/process-action/',
-            type: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken
-            },
-            dataType: 'json',
-            data: {
-                'action': 'accept',
-            },
-            success: function(response) {
-                alert(response.message);
-                // Другие действия при успешной обработке
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(xhr.status + ": " + xhr.responseText); // Вывести ошибку в консоль
-                // Другие действия при ошибке
-            }
-        });
-    });
-
-    
     
     // Back to top button
     $(window).scroll(function () {
@@ -162,6 +99,7 @@
         }
         button.parent().parent().find('input').val(newVal);
     });
+    
     
 })(jQuery);
 

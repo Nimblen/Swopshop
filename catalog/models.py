@@ -1,9 +1,9 @@
 from django.db import models
 from django.urls import reverse
+from autoslug import AutoSlugField
 from user.models import User
-from django.utils.text import slugify
 
-# Create your models here.
+# Create your models here.  
 
 
 class Category(models.Model):
@@ -15,21 +15,18 @@ class Category(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=20)
-    slug = models.SlugField(blank=True)
+    slug = AutoSlugField(populate_from='name')
+    active = models.BooleanField(default=True)
     description = models.TextField()
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    сategory = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=1)
+    deactivate_date = models.DateTimeField(blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=0)
     choices = (("service", "Услуга"), ("item", "Вещь"))
     type = models.CharField(max_length=10, choices=choices, default="item")
 
     def __str__(self) -> str:
         return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("catalog:item_detail", args=[self.slug, self.pk])
@@ -39,9 +36,9 @@ class Item(models.Model):
             try:
                 return self.images.all()[0].photo.url
             except IndexError:
-                return "-"
+                return None
         else:
-            return "-"
+            return None
 
 
 class Comment(models.Model):
@@ -74,15 +71,16 @@ class Exchange(models.Model):
         ("complete", "Завершен"),
     )
 
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=1)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=0)
     received_item = models.ForeignKey(
-        Item, null=True, on_delete=models.SET_NULL, related_name="received_items"
+        Item, null=True, on_delete=models.SET_NULL, related_name="received_item"
     )
     sent_item = models.ForeignKey(
         Item, null=True, on_delete=models.SET_NULL, related_name="sent_item"
     )
     start_exchange = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
+    message = models.CharField(max_length=255, blank=True, null=True)
 
 
 class Message(models.Model):

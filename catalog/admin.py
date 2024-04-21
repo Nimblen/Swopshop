@@ -11,9 +11,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ['name', 'seller', 'date', 'сategory', 'type']
+    list_display = ['name', 'seller', 'date', 'category', 'type', 'active']
     list_filter = ['name', 'seller', 'date']
-    prepopulated_fields = {'slug': ('name',)}
+    list_editable = ['active']
 
 
 

@@ -52,10 +52,21 @@
                             </div>
                         </a>
                     </div>
-                    {% endfor %}
-                
-                
+                    {% endfor %}                
             </div>
+            {% if sent_item %}
+            <form method='post' action="{% url 'catalog:send_offer' sent_item_id=sent_item.id received_item_id=received_item.id %}" >
+                {% csrf_token %}
+                <div class="control-group">
+                    <textarea name="message" class="form-control" rows="8" id="message" placeholder="Message"
+                        data-validation-required-message="Please enter your message" data-validation-optional></textarea>
+                    <p class="help-block text-danger"></p>
+                </div>
+                <div class="form-group mb-0">
+                    <input type="submit" value="send offer" class="btn btn-primary px-3">
+                </div>
+            </form> 
+            {% endif %}
         </div>
     </div>
 </div>

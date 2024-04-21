@@ -526,10 +526,19 @@ mark,
 }
 
 .img-fluid {
-  max-width: 100%;
-  height: auto;
+  width: 350px; 
+  height: 300px; 
 }
-
+.img-fluid1 { 
+  max-width: fit-content;
+  height: auto; 
+}
+.scroll-box {
+  width: 100%;
+  height: 200px;
+  overflow: auto;
+  border: 1px solid #ccc;
+}
 .img-thumbnail {
   padding: 0.25rem;
   background-color: #F5F5F5;
@@ -9709,4 +9718,10 @@ a.text-dark:hover, a.text-dark:focus {
   100% {
     transform: translateY(-15px);
   }
+}
+
+.seller-info {
+  position: absolute;
+  display: none;
+  /* Дополнительные стили */
 }

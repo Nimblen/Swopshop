@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="#">Home</a>
+                <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                <span class="breadcrumb-item active">Add lot</span>
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+
+    <div class="container-fluid">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Add lot</span></h2>
+        <div class="row px-xl-5">
+            <div class="col-lg-7 mb-5"> 
+                <div class="contact-form bg-light p-30">
+
+                    {% comment %} <div class='alert alert-danger'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><strong> {{ error }} </div> {% endcomment %}
+
+                    <div id="success"></div>
+                    <form action="{% url 'catalog:add_item' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="control-group">
+                            <label>Lot name</label>
+                            {{ form.name }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group">
+                            <label>Category</label>
+                            {{ form.category}}
+                    <p class="help-block text-danger"></p>
+                    </div>
+                        <div class="control-group">
+                            <label>Description</label>
+                            {{ form.description }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group">
+                            <label>Type</label>
+                            {{ form.type }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary py-2 px-4" type="submit" >Send
+                                Message</button>
+                        </div>
+                    
+                </div>
+            </div>
+            <div class="col-lg-5 mb-5">
+                <div class="bg-light p-30 mb-30">
+                    {% for form in formset %}
+                    <div class="fa-file-upload">{{ form }}</div>
+                    {% endfor %}
+                </div>
+            </form>
+                <div class="bg-light p-30 mb-3">
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

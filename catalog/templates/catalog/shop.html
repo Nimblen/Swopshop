@@ -29,16 +29,12 @@
                         <div class="product-img position-relative overflow-hidden">
                             
                             <img class="img-fluid" src="{% if my_lot.images.all %}{{ my_lot.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
-                            
-                            <div class="product-action">
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>  
-                            </div>
+                        
                         </div>
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate" href="">{{ my_lot.seller }}</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <a class="h5 text-decoration-none text-truncate" href="">{{my_lot.name}}</a>
+                                <a class="h5 text-decoration-none text-truncate" href="{{my_lot.get_absolute_url}}">{{my_lot.name}}</a>
                             </div>
                         
                         </div>
@@ -93,17 +89,15 @@
                             </div>
                         </div>
                     </div>
-                    
+                    {% if items %}
                     {% for item in items %}
                     <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
                                 <img class="img-fluid" src="{% if item.images.all %}{{ item.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
-
                                 <div class="product-action">
                                     <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-            
                                 </div>
                             </div>
                             <div class="text-center py-4">
@@ -115,12 +109,13 @@
                         </div>
                     </div>
                     {% endfor %}
-                   
+                    {% else %}
                     <div class="col-12">
                         <div class="text-center py-4">
                             <div class="h6 text-decoration-none text-truncate" href="">No lots yet</div>
                         </div>
                     </div>
+                    {% endif %}
                     
                     <div class="col-12">
                     {% include "catalog/includes/paginator.html" %} 

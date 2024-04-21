@@ -68,6 +68,142 @@
                         
                     </div>
                 </div>
+                <div class="collapse mb-5 show ">
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span></h5>
+                    <div class="row px-xl-5">
+                        <div class="col">
+                            <div class="bg-light p-30">
+                                <div class="nav nav-tabs mb-4">
+                                    <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">My lots</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Waiting for confirmation</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">In progress</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-4">exchange history</a>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="tab-pane-1">
+                                        <div class="pre-scrollable">
+                                        <table class="table table-light table-borderless table-hover text-center mb-0">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>Photo</th>
+                                                    <th>Name</th>
+                                                    <th>Type</th>
+                                                    <th>Comments</th>
+                                                    <th>Delete</th>
+                                                    <th>Edit</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="align-middle">
+                                                    {% for item in my_items %}
+                                                    <tr>
+                                                        <td  class="align-middle"><img src="{% if item.get_first_photo %}{{ item.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="" style="width: 50px;"></td>
+                                                        <td class="align-middle"><a href="{{ item.get_absolute_url }}">{{ item.name }}</a></td>
+                                                        <td class="align-middle">{{ item.type }}</td>
+                                                        <td class="align-middle">{{ item.comments.count }}</td>
+                                                        <td class="align-middle"><a href="{% url 'catalog:delete_item' obj_id=item.id  %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+                                                        <td class="align-middle"><button class="btn btn-sm btn-success"><i class="fa fa-edit"></i></button></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab-pane-2">
+                                        <div class="pre-scrollable">
+                                            <table class="table table-light table-borderless table-hover text-center mb-0">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th>Sent item</th>
+                                                        <th>Received item</th>
+                                                        <th>User</th>
+                                                        <th>Status</th>
+                                                        <th>Refuse</th>
+                                                        <th>Accept</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="align-middle">
+                                                    {% for exchange in exchanges %}
+                                                    {% if exchange.status == "waiting" %}
+                                                    <tr>
+                                                        <td  class="align-middle"><a href="{{ exchange.sent_item.get_absolute_url }}"><img src="{{ exchange.sent_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.sent_item.name }}</a></td>
+                                                        <td class="align-middle"><a href="{{ exchange.received_item.get_absolute_url }}"><img src="{{ exchange.received_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.received_item.name }}</a></td>
+                                                        <td class="align-middle"><img src="{{ exchange.received_item.seller.image }}" alt="" style="width: 50px;">{{ exchange.received_item.seller }}</td>
+                                                        <td class="align-middle">{{ exchange.status }}</td>
+                                                        <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id arg='del' %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+                                                        <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id arg='accept' %}" class="btn btn-sm btn-success"><i class="fa fa-check"></i></a></td>
+                                                    </tr>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab-pane-3">
+                                        <div class="pre-scrollable">
+                                        <table class="table table-light table-borderless table-hover text-center mb-0">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>Sent item</th>
+                                                    <th>Received item</th>
+                                                    <th>User</th>
+                                                    <th>Status</th>
+                                                    <th>Refuse</th>
+                                                    <th>Complete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="align-middle">
+                                                {% for exchange in exchanges %}
+                                                {% if exchange.status == "processing" %}
+                                                <tr>
+                                                    <td  class="align-middle"><a href="{{ exchange.sent_item.get_absolute_url }}"><img src="{{ exchange.sent_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.sent_item.name }}</a></td>
+                                                    <td class="align-middle"><a href="{{ exchange.received_item.get_absolute_url }}"><img src="{{ exchange.received_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.received_item.name }}</a></td>
+                                                    <td class="align-middle"><img src="{{ exchange.received_item.seller.image }}" alt="" style="width: 50px;">{{ exchange.received_item.seller }}</td>
+                                                    <td class="align-middle">{{ exchange.status }}</td>
+                                                    <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id arg='del' %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+                                                    <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id arg='accept' %}" class="btn btn-sm btn-success"><i class="fa fa-check"></i></a></td>
+                                                </tr>
+                                                {% endif %}
+                                                {% endfor %}
+                                                
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab-pane-4">
+                                        <div class="pre-scrollable">
+                                            <table class="table table-light table-borderless table-hover text-center mb-0">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th>Sent item</th>
+                                                        <th>Received item</th>
+                                                        <th>User</th>
+                                                        <th>Status</th>
+                                                        </tr>
+                                                </thead>
+                                                <tbody class="align-middle">
+                                                    {% for exchange in exchanges %}
+                                                    {% if exchange.status == "complete" %}
+                                                    <tr>
+                                                        <td  class="align-middle"><a href="{{ exchange.sent_item.get_absolute_url }}"><img src="{{ exchange.sent_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.sent_item.name }}</a></td>
+                                                        <td class="align-middle"><a href="{{ exchange.received_item.get_absolute_url }}"><img src="{{ exchange.received_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.received_item.name }}</a></td>
+                                                        <td class="align-middle"><img src="{{ exchange.received_item.seller.image }}" alt="" style="width: 50px;">{{ exchange.received_item.seller }}</td>
+                                                        <td class="align-middle">{{ exchange.status }}</td>
+                                                    </tr>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
                 
             </div>
             <div class="col-lg-4">
