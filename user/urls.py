@@ -9,7 +9,7 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('registration/', registration, name='registration'),
     path('profile/', profile, name='profile'),
-    path('my-exchanges/', exchanges, name='exchanges'),
+    path('user-profile/<str:username>/<int:user_id>/', user_details, name='user_profile'),
     path('logout/', logout, name='logout'),
 
 ]

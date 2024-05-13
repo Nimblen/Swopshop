@@ -6,6 +6,7 @@ from django.urls import reverse
 from datetime import datetime, timedelta
 from user.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 from catalog.models import Item, Exchange
+from user.models import User, UserComments
 
 # Create your views here.
 
@@ -62,15 +63,21 @@ def profile(request):
     context = {
         "form": form,
         "my_items": Item.objects.filter(seller=request.user, active=True),
+        "favorites": Item.objects.filter(favorites=request.user, active=True).exclude(seller=request.user),
         "exchanges": Exchange.objects.filter(sent_item__seller=request.user),
     }
     return render(request, "user/checkout.html", context)
 
-
-def exchanges(request):
-    exchanges = Exchange.objects.filter(sent_item__seller=request.user)
-    context = {"exchanges": exchanges}
-    return render(request, "user/exchanges.html", context)
+def user_details(request, username=None, user_id=None):
+    user = get_object_or_404(User, username=username, pk=user_id)
+    if request.method == "POST" and request.user.is_authenticated:
+        user_review = request.POST.get("user_review")
+        if user_review:
+            UserComments.objects.create(from_user=request.user, to_user=user, body=user_review)
+            messages.success(request, "Ваше отзыв доставлено")
+            return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    context = {"user": user}
+    return render(request, "user/profile_for_users.html", context)
 
 
 def logout(request):

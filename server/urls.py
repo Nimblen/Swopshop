@@ -25,6 +25,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('catalog/', include('catalog.urls', namespace='catalog')),
     path('user/', include('user.urls', namespace='users')),
+    path('chat/', include('chat.urls', namespace='chat')),
 ]
 
 

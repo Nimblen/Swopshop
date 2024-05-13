@@ -1,14 +1,14 @@
+from django.db import IntegrityError
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
-from user.views import exchanges
-from .utils.services import paginate_objects
+from user.models import User
+from .utils.services import paginate_objects, del_item
 from .models import Comment, Item, Photo_of_item, Exchange
 from .forms import AddMessageForm, AddItemForm, PhotoFormSet
-
 # Create your views here.
 
 
@@ -17,11 +17,14 @@ def index(request):
 
 
 def shop(request):
+    category = request.GET.get("category", None)
     page = request.GET.get("page", 1)
     sort_by = request.GET.get("sort_by", "-date")
     type_by = request.GET.get("type_by", "all")
     per_page = request.GET.get("per_page", 10)
     items = Item.objects.filter(active=True)
+    if category:
+        items = items.filter(category=category)
     my_lots = []
     if request.user.is_authenticated:
         my_lots = items.filter(seller=request.user)[:3]
@@ -32,6 +35,22 @@ def shop(request):
     context = {"items": paginated_items, "my_lots": my_lots}
     return render(request, "catalog/shop.html", context)
 
+
+def like_item(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    if request.user in item.likes.all():
+        item.likes.remove(request.user)
+    else:
+        item.likes.add(request.user)
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+def favorite_item(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    if request.user in item.favorites.all():
+        item.favorites.remove(request.user)
+    else:
+        item.favorites.add(request.user)
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 def item_detail(request, item_slug, item_id):
     item = get_object_or_404(Item, slug=item_slug, pk=item_id)
@@ -79,7 +98,7 @@ def exchange(request, received_item_id):
         if sent_item.seller != request.user:
             sent_item = None
     received_item = get_object_or_404(Item, pk=received_item_id)
-    sent_items_list = Item.objects.filter(seller=request.user)
+    sent_items_list = Item.objects.filter(seller=request.user, active=True)
     context = {
         "received_item": received_item,
         "sent_items": sent_items_list,
@@ -94,40 +113,67 @@ def send_exchange(request, received_item_id, sent_item_id):
     received_item = get_object_or_404(Item, pk=received_item_id)
     if request.method == "POST":
         message = request.POST.get("message", "")
-        Exchange.objects.create(
-            sent_item=sent_item,
-            received_item=received_item,
-            status="waiting",
-            message=message,
-        )
-        messages.success(request, "Отправлено")
+        try:
+            Exchange.objects.create(
+                sent_item=sent_item,
+                received_item=received_item,
+                status="waiting",
+                message=message,
+            )
+            messages.success(request, "Отправлено")
+            return HttpResponseRedirect(reverse("users:profile"))
+        except IntegrityError:
+            messages.error(request, "Ошибка: обмен уже отправлен")
+            return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
 @login_required
-def change_exchange(request, exchange_id, arg):
+def change_exchange(request, exchange_id, action):
     exchange = get_object_or_404(Exchange, pk=exchange_id)
-
-    if arg == "accept":
-        if exchange.status == "waiting":
-            exchange.status = "processing"
+    
+    if action == "accept":
+        accept_exchange(request, exchange)
+    if action == "del":
         if exchange.status == "processing":
-            exchange.status = "complete"
-    elif arg == "del":
-        exchange.delete()
-
-    exchange.save()
+            decrease_active_deals(exchange.sent_item.seller)
+            decrease_active_deals(exchange.received_item.seller)
+        delete_exchange(exchange)
+        
 
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
+def accept_exchange(request, exchange):
+    if exchange.status == "waiting":
+        exchange.status = "processing"
+        exchange.save()
+        increase_active_deals(exchange.sent_item.seller)
+        increase_active_deals(exchange.received_item.seller)
+    elif exchange.status == "processing":
+        exchange.status = "complete"
+        exchange.save()
+        del_item(exchange.sent_item)
+        del_item(exchange.received_item)
+        decrease_active_deals(exchange.sent_item.seller)
+        decrease_active_deals(exchange.received_item.seller)
+
+def delete_exchange(exchange):
+    exchange.delete()
+
+def increase_active_deals(user):
+    user.active_deals += 1
+    user.amount_of_deals += 1
+    user.save()
+
+def decrease_active_deals(user):
+    user.active_deals -= 1
+    user.save()
 
 @login_required
 def delete_obj(request, obj_id):
     obj = get_object_or_404(Item, pk=obj_id)
     if obj.seller == request.user:
-        obj.active = False
-        obj.deactivate_date = datetime.now()
-        obj.save()
+        del_item(obj)
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
@@ -142,3 +188,30 @@ def contact(request):
     comment_form = AddMessageForm()
     context = {"form": comment_form}
     return render(request, "catalog/contact.html", context)
+
+
+def search_view(request):
+    page = request.GET.get("page", 1)
+    sort_by = request.GET.get("sort_by", "-date")
+    type_by = request.GET.get("type_by", "all")
+    per_page = request.GET.get("per_page", 10)
+    word = request.GET.get("q")
+    items = None
+    users = None
+    if word:
+        items = Item.objects.filter(name__iregex=word)
+        if type_by != "all":
+            items = items.filter(type=type_by)
+        paginated_items = paginate_objects(items, page, per_page, sort_by)
+
+        users = User.objects.filter(
+            Q(first_name__iregex=word) | Q(last_name__iregex=word)
+        )
+
+    context = {
+        "title": "Результаты поиска",
+        "found_items": paginated_items,
+        "found_users": users,
+    }
+
+    return render(request, "catalog/search_result.html", context)

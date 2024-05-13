@@ -55,6 +55,7 @@
             </div>
             <div class="col-lg-5 mb-5">
                 <div class="bg-light p-30 mb-30">
+                    {{ formset.management_form }}
                     {% for form in formset %}
                     <div class="fa-file-upload">{{ form }}</div>
                     {% endfor %}

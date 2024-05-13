@@ -3,7 +3,7 @@ from django.urls import reverse
 from autoslug import AutoSlugField
 from user.models import User
 
-# Create your models here.  
+# Create your models here.
 
 
 class Category(models.Model):
@@ -15,7 +15,7 @@ class Category(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=20)
-    slug = AutoSlugField(populate_from='name')
+    slug = AutoSlugField(populate_from="name")
     active = models.BooleanField(default=True)
     description = models.TextField()
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -24,6 +24,8 @@ class Item(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=0)
     choices = (("service", "Услуга"), ("item", "Вещь"))
     type = models.CharField(max_length=10, choices=choices, default="item")
+    likes = models.ManyToManyField(User, related_name="likes", blank=True)
+    favorites =  models.ManyToManyField(User, related_name="favorites", blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -39,6 +41,9 @@ class Item(models.Model):
                 return None
         else:
             return None
+
+    def total_likes(self):
+        return self.likes.count()
 
 
 class Comment(models.Model):
@@ -98,7 +103,6 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Message by {self.user}"
-
 
 
 class Visit(models.Model):

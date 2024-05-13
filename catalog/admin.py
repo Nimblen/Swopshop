@@ -9,6 +9,8 @@ from .models import Item, Exchange, Photo_of_item, Category, Message, Comment
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name']
 
+
+
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     list_display = ['name', 'seller', 'date', 'category', 'type', 'active']

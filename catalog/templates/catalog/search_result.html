@@ -8,7 +8,7 @@
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
-                    <span class="breadcrumb-item text-dark">Shop</span>
+                    <span class="breadcrumb-item text-dark">Results</span>
                 </nav>
             </div>
         </div>
@@ -21,38 +21,30 @@
         <div class="row px-xl-5">
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
-            <h3> Your lots </h>
-                {% if user.is_authenticated %}
-                {% if my_lots.count > 0 %}
-                <div class="pre-scrollable">
-                {% for my_lot in my_lots %}
+            <h3> Users </h>
+                {% if found_users %}
+                {% for user in found_users %}
                     <div class="product-item bg-light mb-4">
                         <div class="product-img position-relative overflow-hidden">
                             
-                            <img class="img-fluid" src="{% if my_lot.images.all %}{{ my_lot.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
+                            <img class="img-fluid" src="{% if user.image %}{{ user.image }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}" alt="">
                         
                         </div>
                         <div class="text-center py-4">
-                            <a class="h6 text-decoration-none text-truncate" href="{{ my_lot.seller.get_absolute_url }}">{{ my_lot.seller }}</a>
+                            <p class="h6 text-decoration-none text-truncate" href="">{{ user.amount_of_deal }}</p>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <a class="h5 text-decoration-none text-truncate" href="{{my_lot.get_absolute_url}}">{{my_lot.name}}</a>
+                                <a class="h5 text-decoration-none text-truncate" href="">{{user.first_name}} {{user.last_name}}</a>
                             </div>
-                            <small>likes: {{ my_lot.total_likes }}</small>
+                        
                         </div>
                 </div>
                 {% endfor %}
-                </div>
                 {% else  %}
                 <div class="text-center py-4">
-                    <div class="h6 text-decoration-none text-truncate" href="">You have no lots</div>
+                    <div class="h6 text-decoration-none text-truncate" href="">No users</div>
                 </div>
                 {% endif %}
-                {% else %}
-                <div class="text-center py-4">
-                    <div class="h6 text-decoration-none text-truncate" href="">log in to add a lot</div>
-                </div>
-                <br><a href="{% url 'users:login' %}" class="btn btn-primary px-3">Login to add a lot</a>
-                {% endif %}  
+  
             </div>
             <!-- Shop Sidebar End -->
 
@@ -69,13 +61,6 @@
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" href="?{% change_params sort_by="-date"%}">Latest</a>
                                         <a class="dropdown-item" href="?{% change_params sort_by="date"%}">Oldest</a>
-                                        
-                                        <a class="dropdown-item" href="?{% change_params sort_by='-likes' %}">Rating (Descending)</a>
-                                   
-                                        <a class="dropdown-item" href="?{% change_params sort_by='likes' %}">Rating (Ascending)</a>
-                                  
-                                    
-                                    
                                     </div>
                                 </div>
                                 
@@ -98,34 +83,22 @@
                             </div>
                         </div>
                     </div>
-                    {% if items %}
-                    {% for item in items %}
+                    {% if found_items %}
+                    {% for item in found_items %}
                     <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
                                 <img class="img-fluid" src="{% if item.images.all %}{{ item.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
-                                {% if user.is_authenticated %}
                                 <div class="product-action">
-                                    {% if request.user in item.likes.all %}
-                                    <a class="btn btn-outline-dark btn-square " href="{% url 'catalog:like_item' item_id=item.id  %}"><i class="fa fa-heart "></i></a>
-                                    {% else %}
-                                    <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:like_item' item_id=item.id  %}"><i class="far fa-heart"></i></a>
-                                    {% endif %}
-                                    <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:exchange' received_item_id=item.id  %}"><i class="fa fa-sync-alt"></i></a>
-                                    {% if request.user in item.favorites.all %}
-                                    <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:favorite_item' item_id=item.id  %}"><i class="fa fa-star"></i></a>
-                                    {% else %}
-                                    <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:favorite_item' item_id=item.id  %}"><i class="far fa-star"></i></a>
-                                    {% endif %}
+                                    <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 </div>
-                                {% endif %}
-                            </div>                        
+                            </div>
                             <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate" href="{{ item.seller.get_absolute_url }}">{{ item.seller }}</a>
+                                <a class="h6 text-decoration-none text-truncate" href="">{{ item.seller }}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                     <a class="h5 text-decoration-none text-truncate" href="{{ item.get_absolute_url }}">{{item.name}}</a>
                                 </div>
-                                <small>likes: {{ item.total_likes }}</small>
                             </div>
                         </div>
                     </div>
@@ -133,7 +106,7 @@
                     {% else %}
                     <div class="col-12">
                         <div class="text-center py-4">
-                            <div class="h6 text-decoration-none text-truncate" href="">No lots yet</div>
+                            <div class="h6 text-decoration-none text-truncate" href="">No results</div>
                         </div>
                     </div>
                     {% endif %}
@@ -147,6 +120,5 @@
         </div>
     </div>
     <!-- Shop End -->
-
 
 {% endblock %}

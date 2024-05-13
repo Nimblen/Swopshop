@@ -6,9 +6,9 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                    <span class="breadcrumb-item active">Checkout</span>
+                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
+                    <a class="breadcrumb-item text-dark" href="{% url "catalog:shop" %}">Shop</a>
+                    <span class="breadcrumb-item active">Profile</span>
                 </nav>
             </div>
         </div>
@@ -36,6 +36,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="col-md-6 form-group">
                             <label>Username</label>
                             {{ form.username }}
@@ -65,19 +66,20 @@
                             <input type="submit" value="Save" class="btn btn-primary px-3">
                         </div>
                     </form>
-                        
+                
                     </div>
                 </div>
                 <div class="collapse mb-5 show ">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span></h5>
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Lots and exchanges</span></h5>
                     <div class="row px-xl-5">
                         <div class="col">
                             <div class="bg-light p-30">
                                 <div class="nav nav-tabs mb-4">
                                     <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">My lots</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Waiting for confirmation</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">In progress</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-4">exchange history</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Favorite lots</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Waiting for confirmation</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-4">In progress</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-5">exchange history</a>
                                 </div>
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="tab-pane-1">
@@ -90,7 +92,6 @@
                                                     <th>Type</th>
                                                     <th>Comments</th>
                                                     <th>Delete</th>
-                                                    <th>Edit</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="align-middle">
@@ -101,7 +102,6 @@
                                                         <td class="align-middle">{{ item.type }}</td>
                                                         <td class="align-middle">{{ item.comments.count }}</td>
                                                         <td class="align-middle"><a href="{% url 'catalog:delete_item' obj_id=item.id  %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
-                                                        <td class="align-middle"><button class="btn btn-sm btn-success"><i class="fa fa-edit"></i></button></td>
                                                     </tr>
                                                     {% endfor %}
                                                     
@@ -109,7 +109,34 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="tab-pane-2">
+                                    <div class="tab-pane fade show" id="tab-pane-2">
+                                        <div class="pre-scrollable">
+                                        <table class="table table-light table-borderless table-hover text-center mb-0">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>Photo</th>
+                                                    <th>Name</th>
+                                                    <th>Type</th>
+                                                    <th>Comments</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="align-middle">
+                                                    {% for favorite in favorites %}
+                                                    <tr>
+                                                        <td  class="align-middle"><img src="{% if favorite.get_first_photo %}{{ favorite.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="" style="width: 50px;"></td>
+                                                        <td class="align-middle"><a href="{{ favorite.get_absolute_url }}">{{ favorite.name }}</a></td>
+                                                        <td class="align-middle">{{ favorite.type }}</td>
+                                                        <td class="align-middle">{{ favorite.comments.count }}</td>
+                                                        <td class="align-middle"><a href="{% url 'catalog:favorite_item' item_id=favorite.id  %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab-pane-3">
                                         <div class="pre-scrollable">
                                             <table class="table table-light table-borderless table-hover text-center mb-0">
                                                 <thead class="thead-dark">
@@ -124,14 +151,14 @@
                                                 </thead>
                                                 <tbody class="align-middle">
                                                     {% for exchange in exchanges %}
-                                                    {% if exchange.status == "waiting" %}
+                                                    {% if exchange.status == "waiting"   %}
                                                     <tr>
                                                         <td  class="align-middle"><a href="{{ exchange.sent_item.get_absolute_url }}"><img src="{{ exchange.sent_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.sent_item.name }}</a></td>
                                                         <td class="align-middle"><a href="{{ exchange.received_item.get_absolute_url }}"><img src="{{ exchange.received_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.received_item.name }}</a></td>
                                                         <td class="align-middle"><img src="{{ exchange.received_item.seller.image }}" alt="" style="width: 50px;">{{ exchange.received_item.seller }}</td>
                                                         <td class="align-middle">{{ exchange.status }}</td>
-                                                        <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id arg='del' %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
-                                                        <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id arg='accept' %}" class="btn btn-sm btn-success"><i class="fa fa-check"></i></a></td>
+                                                        <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id action='del' %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+                                                        <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id action='accept' %}" class="btn btn-sm btn-success"><i class="fa fa-check"></i></a></td>
                                                     </tr>
                                                     {% endif %}
                                                     {% endfor %}
@@ -140,7 +167,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="tab-pane-3">
+                                    <div class="tab-pane fade" id="tab-pane-4">
                                         <div class="pre-scrollable">
                                         <table class="table table-light table-borderless table-hover text-center mb-0">
                                             <thead class="thead-dark">
@@ -161,8 +188,8 @@
                                                     <td class="align-middle"><a href="{{ exchange.received_item.get_absolute_url }}"><img src="{{ exchange.received_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.received_item.name }}</a></td>
                                                     <td class="align-middle"><img src="{{ exchange.received_item.seller.image }}" alt="" style="width: 50px;">{{ exchange.received_item.seller }}</td>
                                                     <td class="align-middle">{{ exchange.status }}</td>
-                                                    <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id arg='del' %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
-                                                    <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id arg='accept' %}" class="btn btn-sm btn-success"><i class="fa fa-check"></i></a></td>
+                                                    <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id action='del' %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+                                                    <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id action='accept' %}" class="btn btn-sm btn-success"><i class="fa fa-check"></i></a></td>
                                                 </tr>
                                                 {% endif %}
                                                 {% endfor %}
@@ -171,7 +198,7 @@
                                         </table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="tab-pane-4">
+                                    <div class="tab-pane fade" id="tab-pane-5">
                                         <div class="pre-scrollable">
                                             <table class="table table-light table-borderless table-hover text-center mb-0">
                                                 <thead class="thead-dark">
@@ -207,64 +234,26 @@
                 
             </div>
             <div class="col-lg-4">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Exchange Total</span></h5>
                 <div class="bg-light p-30 mb-5">
-                    <div class="border-bottom">
-                        <h6 class="mb-3">Products</h6>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 1</p>
-                            <p>$150</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 2</p>
-                            <p>$150</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 3</p>
-                            <p>$150</p>
-                        </div>
-                    </div>
                     <div class="border-bottom pt-3 pb-2">
                         <div class="d-flex justify-content-between mb-3">
-                            <h6>Subtotal</h6>
-                            <h6>$150</h6>
+                            <h6>My rating</h6>
+                            <h6>{{ user.user_rating }}</h6>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">$10</h6>
+                            <h6 class="font-weight-medium">Active exchanges</h6>
+                            <h6 class="font-weight-medium">{{ user.active_deals }}</h6>
                         </div>
                     </div>
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
-                            <h5>Total</h5>
-                            <h5>$160</h5>
+                            <h5>Total number of exchanges</h5>
+                            <h5>{{ user.amount_of_deals }}</h5>
                         </div>
                     </div>
                 </div>
-                <div class="mb-5">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
-                    <div class="bg-light p-30">
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                                <label class="custom-control-label" for="paypal">Paypal</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="directcheck">
-                                <label class="custom-control-label" for="directcheck">Direct Check</label>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
-                                <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-                            </div>
-                        </div>
-                        <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

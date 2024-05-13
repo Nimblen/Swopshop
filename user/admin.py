@@ -5,6 +5,7 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'user_rating', 'amount_of_deals')
-    list_filter = ('username', 'user_rating', 'amount_of_deals')
+    list_display = ('username', 'amount_of_deals')
+    list_filter = ('username', 'amount_of_deals')
     readonly_fields = ('ip_address', 'password',)
+    
