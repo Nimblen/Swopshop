@@ -70,16 +70,64 @@ def profile(request):
 
 def user_details(request, username=None, user_id=None):
     user = get_object_or_404(User, username=username, pk=user_id)
+    context = {"user": user}
+    return render(request, "user/profile_for_users.html", context)
+
+
+@login_required
+def add_comment(request, user_id=None):
+    user = get_object_or_404(User, pk=user_id)
     if request.method == "POST" and request.user.is_authenticated:
         user_review = request.POST.get("user_review")
         if user_review:
             UserComments.objects.create(from_user=request.user, to_user=user, body=user_review)
             messages.success(request, "Ваше отзыв доставлено")
-            return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
-    context = {"user": user}
-    return render(request, "user/profile_for_users.html", context)
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
 
 
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse("index"))
+
+
+
+
+@login_required
+def delete_comment(request, comment_id):
+    obj = get_object_or_404(UserComments, pk=comment_id)
+    if obj.from_user == request.user:
+        obj.delete()
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
+
+@login_required
+def user_positive_rating(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    current_user = request.user
+
+    if current_user in user.user_positive_rating.all():
+        user.user_positive_rating.remove(current_user)
+    else:
+        if current_user in user.user_negative_rating.all():
+            user.user_negative_rating.remove(current_user)
+        user.user_positive_rating.add(current_user)
+
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
+
+@login_required
+def user_negative_rating(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    current_user = request.user
+
+    if current_user in user.user_negative_rating.all():
+        user.user_negative_rating.remove(current_user)
+    else:
+        if current_user in user.user_positive_rating.all():
+            user.user_positive_rating.remove(current_user)
+        user.user_negative_rating.add(current_user)
+
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))

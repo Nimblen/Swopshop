@@ -69,6 +69,9 @@ class Photo_of_item(models.Model):
         return self.item.name
 
 
+
+
+
 class Exchange(models.Model):
     STATUS_CHOICES = (
         ("waiting", "Ожидание владельца"),

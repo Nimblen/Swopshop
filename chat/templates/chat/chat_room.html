@@ -4,9 +4,12 @@
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
+    {{ request.user.username|json_script:"request-user" }}
     <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const requestUser = JSON.parse(
+    document.getElementById('request-user').textContent);
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
@@ -14,12 +17,20 @@
             + roomName
             + '/'
         );
-
+        
         chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.username + ' [' + data.time + ']: ' + data.message + '\n');
+        const data = JSON.parse(e.data);
+        const dateOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
+        const datetime = new Date(data.datetime).toLocaleString('en', dateOptions);
+        const isMe = data.user === requestUser;
+        const source = isMe ? 'me' : 'other';
+        const chat = document.getElementById('chat-log');
+        chat.innerHTML += '<div class="message ' + source + '">' +
+            '<strong>' + requestUser + '</strong> ' +
+            '<span class="date">' + '21.04.24' + '</span><br>' +
+            data.message + '</div>';
+        chat.scrollTop = chat.scrollHeight;
         };
-
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
         };
@@ -33,14 +44,13 @@
 
             document.querySelector('#chat-message-submit').onclick = function(e) {
                 const messageInputDom = document.querySelector('#chat-message-input');
-                const acc_btn = document.getElementById("acc_btn").value;
+                
                 const message = messageInputDom.value;
                 chatSocket.send(JSON.stringify({
-                    'username': acc_btn,
                     'message': message,
+                    'username': requestUser
                 }));
                 messageInputDom.value = '';
             };
     </script>
 </body>
-

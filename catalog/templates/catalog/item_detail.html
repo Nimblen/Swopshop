@@ -118,7 +118,7 @@
                                     <div class="media mb-4">
                                         <img src="{% if comment.user.image %} {{ comment.user.image.url }}{% else %} {% static 'img/default_avatar.jpg' %} {% endif %}" alt="Image" class="img-fluid1 mr-3 mt-1" style="width: 45px;">
                                         <div class="media-body">
-                                            <h6>{{ comment.user.first_name }} {{ comment.user.last_name }}<small> - <i>{{ comment.created }}</i></small></h6>
+                                            <h6>{{ comment.user.username }}<small> - <i>{{ comment.created }}</i>{% if request.user == comment.user %} <a href="{% url "catalog:delete_comment" comment_id=comment.id  %}" class="btn-danger" >delete</a>{% endif %}</small></h6>
 
                                             <p>{{comment.body}}</p>
                                         </div>
@@ -160,16 +160,31 @@
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel related-carousel">
+                    {% if user.is_authenticated %}
                     {% get_items_by_category item.category.name user=request.user as items %}
+                    {% else %}
+                    {% get_items_by_category item.category.name as items %}
+                    {% endif %}
                     {% for item in items %}
                     
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
                                 <img class="img-fluid" src="{% if item.images.all %}{{ item.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
+                                {% if user.is_authenticated %}
                                 <div class="product-action">
-                                    <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                    {% if request.user in item.likes.all %}
+                                    <a class="btn btn-outline-dark btn-square " href="{% url 'catalog:like_item' item_id=item.id  %}"><i class="fa fa-heart "></i></a>
+                                    {% else %}
+                                    <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:like_item' item_id=item.id  %}"><i class="far fa-heart"></i></a>
+                                    {% endif %}
+                                    <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:exchange' received_item_id=item.id  %}"><i class="fa fa-sync-alt"></i></a>
+                                    {% if request.user in item.favorites.all %}
+                                    <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:favorite_item' item_id=item.id  %}"><i class="fa fa-star"></i></a>
+                                    {% else %}
+                                    <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:favorite_item' item_id=item.id  %}"><i class="far fa-star"></i></a>
+                                    {% endif %}
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="text-center py-4">
                                 <a class="h6 text-decoration-none text-truncate" href="">{{ item.seller }}</a>
@@ -186,8 +201,10 @@
     </div>
     <script>
         document.getElementById('openChat').addEventListener('click', function() {
-            var chatWindow = window.open('{% url 'chat:chat_room' room_name=item.seller.password %}', 'Chat Window', 'width=600, height=400');
+            const room = '{{ item.seller.id }}' + '{{request.user.id}}';
+            var chatWindow = window.open('/chat/' + room + '/', 'Chat Window', 'width=600, height=400');
         });
+        
     </script>
 
 {% endblock %}

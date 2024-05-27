@@ -177,6 +177,14 @@ def delete_obj(request, obj_id):
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
+@login_required
+def delete_comment(request, comment_id):
+    obj = get_object_or_404(Comment, pk=comment_id)
+    if obj.user == request.user:
+        obj.delete()
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
 def contact(request):
     if request.method == "POST":
         comment_form = AddMessageForm(data=request.POST)

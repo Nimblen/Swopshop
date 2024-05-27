@@ -144,6 +144,9 @@
                             <a href="{% url 'index' %}" class="nav-item nav-link active">Home</a>
                             <a href="{% url 'catalog:shop' %}" class="nav-item nav-link">Shop</a>
                             <a href="{% url 'catalog:add_message' %}" class="nav-item nav-link">Contact</a>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'catalog:add_item' %}" class="nav-item nav-link">Add lot</a>
+                            {% endif %}
                         </div>
 
                     </div>
@@ -235,6 +238,13 @@
 
 
     <!-- JavaScript Libraries -->
+    {% block include_js %}
+    {% endblock %}
+    <script>document.addEventListener('DOMContentLoaded', (event) => {
+        // DOM loaded
+        {% block domready %}
+        {% endblock %}
+    })</script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'lib/easing/easing.min.js' %}"></script>

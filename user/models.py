@@ -1,3 +1,4 @@
+from typing import Self
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
@@ -8,12 +9,15 @@ from django.urls import reverse
 class User(AbstractUser):
     image = models.ImageField(upload_to='users_images', null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
-    user_positive_rating = models.FloatField(null=True, blank=True, default=0)
-    user_negative_rating = models.FloatField(null=True, blank=True, default=0)
+    user_positive_rating = models.ManyToManyField('self', blank=True)
+    user_negative_rating = models.ManyToManyField('self', blank=True)
     amount_of_deals = models.IntegerField(default=0) 
     active_deals = models.IntegerField(default=0)
     ip_address  = models.GenericIPAddressField(blank=True, null=True)
     address = models.CharField(max_length=200, null=True, blank=True)
+
+
+
 
 
     def get_absolute_url(self):

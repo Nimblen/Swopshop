@@ -20,7 +20,7 @@
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-lg-8">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">My information</span></h5>
                 <form action="{% url 'users:profile' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                 
@@ -79,7 +79,8 @@
                                     <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Favorite lots</a>
                                     <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Waiting for confirmation</a>
                                     <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-4">In progress</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-5">exchange history</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-5">Exchange history</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-6">Reviews</a>
                                 </div>
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="tab-pane-1">
@@ -145,21 +146,30 @@
                                                         <th>Received item</th>
                                                         <th>User</th>
                                                         <th>Status</th>
+                                                        <th>Message</th>
                                                         <th>Refuse</th>
                                                         <th>Accept</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="align-middle">
                                                     {% for exchange in exchanges %}
-                                                    {% if exchange.status == "waiting"   %}
+                                                    {% if exchange.status == "waiting" %}
                                                     <tr>
                                                         <td  class="align-middle"><a href="{{ exchange.sent_item.get_absolute_url }}"><img src="{{ exchange.sent_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.sent_item.name }}</a></td>
                                                         <td class="align-middle"><a href="{{ exchange.received_item.get_absolute_url }}"><img src="{{ exchange.received_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.received_item.name }}</a></td>
                                                         <td class="align-middle"><img src="{{ exchange.received_item.seller.image }}" alt="" style="width: 50px;">{{ exchange.received_item.seller }}</td>
                                                         <td class="align-middle">{{ exchange.status }}</td>
+                                                        <td class="align-middle"><button onclick="toggleDetails(this)"><i class="fa fa-envelope"></i></button></td>
                                                         <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id action='del' %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
                                                         <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id action='accept' %}" class="btn btn-sm btn-success"><i class="fa fa-check"></i></a></td>
+                                                        
+                                                        <tr class="details-row" style="display: none;">
+                                                            <td colspan="6">
+                                                                {{ exchange.message }}
+                                                            </td>
+                                                        </tr>
                                                     </tr>
+                                                    
                                                     {% endif %}
                                                     {% endfor %}
                                                     
@@ -225,6 +235,44 @@
                                             </table>
                                         </div>
                                     </div>
+                                    <div class="tab-pane fade" id="tab-pane-6">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h4 class="mb-4">{{ user.to_user.count }} review for "{{ user.username }}"</h4>
+                                                <div class="pre-scrollable" >
+            {% for comment in user.to_user.all %}
+            
+                                                <div class="media mb-4">
+                                                    <img src="{% if comment.user.image %} {{ comment.user.image.url }}{% else %} {% static 'img/default_avatar.jpg' %} {% endif %}" alt="Image" class="img-fluid1 mr-3 mt-1" style="width: 45px;">
+                                                    <div class="media-body">
+                                                        <h6>{{ comment.from_user.username }}<small> - <i>{{ comment.created }}</i>{% if request.user == comment.from_user %} <a href="{% url "users:delete_comment" comment_id=comment.id  %}" class="btn-danger" >delete</a>{% endif %}</small></h6>
+            
+                                                        <p>{{comment.body}}</p>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h4 class="mb-4">Leave a review</h4>
+                                                <small>Your email address will not be published. Required fields are marked *</small>
+                                                {% if user.is_authenticated %}                                    
+                                                <form action="{% url "users:add_comment" user_id=user.id %}" method="post" >
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="message">Your Review *</label>
+                                                        <textarea name="user_review" id="message" cols="30" rows="5" class="form-control"></textarea>
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                                                    </div> 
+                                                </form>
+                                                {% else %}
+                                                <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Login to leave a review</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -237,10 +285,6 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Exchange Total</span></h5>
                 <div class="bg-light p-30 mb-5">
                     <div class="border-bottom pt-3 pb-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <h6>My rating</h6>
-                            <h6>{{ user.user_rating }}</h6>
-                        </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Active exchanges</h6>
                             <h6 class="font-weight-medium">{{ user.active_deals }}</h6>
@@ -258,5 +302,19 @@
         </div>
     </div>
     <!-- Checkout End -->
+    <script>function toggleDetails(button) {
+        var row = button.parentNode.parentNode.nextElementSibling;
+        if(row.classList.contains('details-row')) {
+            if(row.style.display === 'none') {
+                row.style.display = 'table-row';
+                button.querySelector('i').classList.add("fa-envelope-open");
+
+            } else {
+                row.style.display = 'none';
+                button.querySelector('i').classList.add("fa-envelope");
+            }
+        }
+    }
+    </script>
 
 {% endblock %}
