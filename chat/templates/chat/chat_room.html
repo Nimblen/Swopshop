@@ -1,10 +1,12 @@
+{% extends "Base.html" %} 
 {% load static %}
+{% block content %}
 <body>
     <textarea readonly id="chat-log" cols="100" rows="20"></textarea><br>
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
-    {{ request.user.username|json_script:"request-user" }}
+    {{ user.username|json_script:"request-user" }}
     <script>
 
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
@@ -20,15 +22,8 @@
         
         chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        const dateOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
-        const datetime = new Date(data.datetime).toLocaleString('en', dateOptions);
-        const isMe = data.user === requestUser;
-        const source = isMe ? 'me' : 'other';
         const chat = document.getElementById('chat-log');
-        chat.innerHTML += '<div class="message ' + source + '">' +
-            '<strong>' + requestUser + '</strong> ' +
-            '<span class="date">' + '21.04.24' + '</span><br>' +
-            data.message + '</div>';
+        chat.innerHTML += requestUser + ':' + data.time + ':' + data.message + '\n';
         chat.scrollTop = chat.scrollHeight;
         };
         chatSocket.onclose = function(e) {
@@ -54,3 +49,4 @@
             };
     </script>
 </body>
+{% endblock %}

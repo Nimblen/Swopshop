@@ -37,8 +37,7 @@
                 <div class="signin__logo">
                     <a href="#"><img src="{% static 'img/siign-in-logo.png' %}" alt=""></a>
                 </div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore dolore
-                    magna aliqua viverra.</p>
+                
                 <div class="signin__form">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
@@ -68,6 +67,15 @@
                                     <a href="#" class="google"><i class="fa fa-google"></i></a>
                                 </div>
                                 <div class="divide">or</div>
+                                {% if reg_form.errors %}
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                                    style="margin-top: 50px;">
+                                    {{ reg_form.errors }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                {% endif %}
                                 <form action="{% url 'users:registration' %}" method="post">
                                     {% csrf_token %}
                                     {{ reg_form.username }}
@@ -94,6 +102,23 @@
                                     <a href="#" class="google"><i class="fa fa-google"></i></a>
                                 </div>
                                 <div class="divide">or</div>
+                                {% if messages or login_form.non_field_errors %}
+                        <div class="alert
+                        {% if messages %} alert-success {% else %} alert-warning {% endif %}
+                        alert-dismissible fade show" role="alert"
+                            style="margin-top: 50px;">
+                            {% if messages %}
+                            {% for message in messages %}
+                            {{ message }}
+                            {% endfor %}
+                            {% else %}
+                            {{ login_form.non_field_errors }}
+                            {% endif %}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {% endif %}
                                 <form action="{% url 'users:login' %}" method="post">
                                     {% csrf_token %}
                                     {{ login_form.username }}

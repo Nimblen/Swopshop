@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth, messages
@@ -63,10 +62,13 @@ def profile(request):
     context = {
         "form": form,
         "my_items": Item.objects.filter(seller=request.user, active=True),
-        "favorites": Item.objects.filter(favorites=request.user, active=True).exclude(seller=request.user),
+        "favorites": Item.objects.filter(favorites=request.user, active=True).exclude(
+            seller=request.user
+        ),
         "exchanges": Exchange.objects.filter(sent_item__seller=request.user),
     }
     return render(request, "user/checkout.html", context)
+
 
 def user_details(request, username=None, user_id=None):
     user = get_object_or_404(User, username=username, pk=user_id)
@@ -80,17 +82,16 @@ def add_comment(request, user_id=None):
     if request.method == "POST" and request.user.is_authenticated:
         user_review = request.POST.get("user_review")
         if user_review:
-            UserComments.objects.create(from_user=request.user, to_user=user, body=user_review)
+            UserComments.objects.create(
+                from_user=request.user, to_user=user, body=user_review
+            )
             messages.success(request, "Ваше отзыв доставлено")
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
-
 
 
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse("index"))
-
-
 
 
 @login_required
@@ -99,7 +100,6 @@ def delete_comment(request, comment_id):
     if obj.from_user == request.user:
         obj.delete()
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
-
 
 
 @login_required
@@ -115,7 +115,6 @@ def user_positive_rating(request, user_id):
         user.user_positive_rating.add(current_user)
 
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
-
 
 
 @login_required

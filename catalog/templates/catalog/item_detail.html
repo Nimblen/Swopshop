@@ -63,11 +63,11 @@
                     <p class="mb-4">{{ item.description }}</p>
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity mr-3" style="width: 130px;">
-                        {% if request.user != item.seller and user.is_authenticated %}
-                        <a href="{% url 'catalog:exchange' received_item_id=item.id  %}"  class="btn btn-primary px-3"><i class="fa fa-sync-alt"></i> offer an exchange </a>
-                        </div>
-                        <div class="input-group quantity mr-3" style="width: 130px;">
                         <button class="btn btn-primary px-3" id="openChat" >Open Chat</button>
+                        </div>
+                        {% if request.user != item.seller and user.is_authenticated %}
+                        <div class="input-group quantity mr-3" style="width: 130px;">
+                            <a href="{% url 'catalog:exchange' received_item_id=item.id  %}"  class="btn btn-primary px-3"><i class="fa fa-sync-alt"></i> offer an exchange </a>
                         </div>
                         <div class="input-group quantity mr-3" style="width: 130px;">
                             {% if request.user in item.likes.all %}
@@ -94,7 +94,7 @@
                             <a class="text-dark px-2" href="">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a class="text-dark px-2" href="">
+                            <a class="text-dark px-2" href="/chat/${roomName}/">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                             <a class="text-dark px-2" href="">
@@ -201,8 +201,8 @@
     </div>
     <script>
         document.getElementById('openChat').addEventListener('click', function() {
-            const room = '{{ item.seller.id }}' + '{{request.user.id}}';
-            var chatWindow = window.open('/chat/' + room + '/', 'Chat Window', 'width=600, height=400');
+            var chatWindow = window.open('/chat/' + {{item.id}} + '/', 'Chat Window', 'width=800, height=700');
+            
         });
         
     </script>

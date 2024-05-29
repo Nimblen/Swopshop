@@ -1,3 +1,6 @@
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
@@ -30,3 +33,11 @@ def del_item(obj):
     obj.active = False
     obj.deactivate_date = datetime.now()
     return obj.save()
+
+
+
+
+
+# Функция для отправки электронной почты
+
+# Отправка ссылки на комнату чата другому пользователю
