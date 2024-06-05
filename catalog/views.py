@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -54,6 +55,9 @@ def favorite_item(request, item_id):
 
 def item_detail(request, item_slug, item_id):
     item = get_object_or_404(Item, slug=item_slug, pk=item_id)
+    items_by_category = Item.objects.filter(category__name=item.category, active=True).exclude(id=item.id)
+    if request.user.is_authenticated:
+        items_by_category.exclude(seller=request.user)
     photos_of_items = Photo_of_item.objects.filter(item=item)
     if request.method == "POST" and request.user.is_authenticated:
         review = request.POST.get("review")
@@ -61,10 +65,11 @@ def item_detail(request, item_slug, item_id):
             Comment.objects.create(user=request.user, item=item, body=review)
             messages.success(request, "Ваше отзыв доставлено")
             return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    context = {"item": item, "photos_of_items": photos_of_items, "items_by_category": items_by_category}
     return render(
         request,
         "catalog/item_detail.html",
-        {"item": item, "photos_of_items": photos_of_items},
+        context,
     )
 
 

@@ -14,7 +14,7 @@ class Category(models.Model):
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=100)
     slug = AutoSlugField(populate_from="name")
     active = models.BooleanField(default=True)
     description = models.TextField()
@@ -25,7 +25,7 @@ class Item(models.Model):
     choices = (("service", "Услуга"), ("item", "Вещь"))
     type = models.CharField(max_length=10, choices=choices, default="item")
     likes = models.ManyToManyField(User, related_name="likes", blank=True)
-    favorites =  models.ManyToManyField(User, related_name="favorites", blank=True)
+    favorites = models.ManyToManyField(User, related_name="favorites", blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -67,9 +67,6 @@ class Photo_of_item(models.Model):
 
     def __str__(self) -> str:
         return self.item.name
-
-
-
 
 
 class Exchange(models.Model):

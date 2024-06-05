@@ -9,3 +9,6 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('username', 'amount_of_deals')
     readonly_fields = ('ip_address', 'password',)
     
+
+
+    

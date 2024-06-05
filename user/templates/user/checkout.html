@@ -152,7 +152,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="align-middle">
-                                                    {% for exchange in exchanges %}
+                                                    {% for exchange in waiting_status %}
                                                     {% if exchange.status == "waiting" %}
                                                     <tr>
                                                         <td  class="align-middle"><a href="{{ exchange.sent_item.get_absolute_url }}"><img src="{{ exchange.sent_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.sent_item.name }}</a></td>
@@ -191,12 +191,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="align-middle">
-                                                {% for exchange in exchanges %}
+                                                {% for exchange in accepted_exchanges %}
                                                 {% if exchange.status == "processing" %}
                                                 <tr>
                                                     <td  class="align-middle"><a href="{{ exchange.sent_item.get_absolute_url }}"><img src="{{ exchange.sent_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.sent_item.name }}</a></td>
                                                     <td class="align-middle"><a href="{{ exchange.received_item.get_absolute_url }}"><img src="{{ exchange.received_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.received_item.name }}</a></td>
+                                                    {% if exchange.sent_item.seller == request.user %}
                                                     <td class="align-middle"><img src="{{ exchange.received_item.seller.image }}" alt="" style="width: 50px;">{{ exchange.received_item.seller }}</td>
+                                                    {% else %}
+                                                    <td class="align-middle"><img src="{{ exchange.sent_item.seller.image }}" alt="" style="width: 50px;">{{ exchange.sent_item.seller }}</td>
+                                                    {% endif %}
                                                     <td class="align-middle">{{ exchange.status }}</td>
                                                     <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id action='del' %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
                                                     <td class="align-middle"><a href="{% url 'catalog:change_exchange' exchange_id=exchange.id action='accept' %}" class="btn btn-sm btn-success"><i class="fa fa-check"></i></a></td>
@@ -220,7 +224,7 @@
                                                         </tr>
                                                 </thead>
                                                 <tbody class="align-middle">
-                                                    {% for exchange in exchanges %}
+                                                    {% for exchange in accepted_exchanges %}
                                                     {% if exchange.status == "complete" %}
                                                     <tr>
                                                         <td  class="align-middle"><a href="{{ exchange.sent_item.get_absolute_url }}"><img src="{{ exchange.sent_item.get_first_photo }}" alt="" style="width: 50px;">{{ exchange.sent_item.name }}</a></td>

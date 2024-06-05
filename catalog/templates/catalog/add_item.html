@@ -22,8 +22,7 @@
                 <div class="contact-form bg-light p-30">
 
                     {% comment %} <div class='alert alert-danger'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><strong> {{ error }} </div> {% endcomment %}
-
-                    <div id="success"></div>
+                        
                     <form action="{% url 'catalog:add_item' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="control-group">
@@ -47,8 +46,8 @@
                             <p class="help-block text-danger"></p>
                         </div>
                         <div>
-                            <button class="btn btn-primary py-2 px-4" type="submit" >Send
-                                Message</button>
+                            <button class="btn btn-primary py-2 px-4" type="submit" >Add 
+                                Lot</button>
                         </div>
                     
                 </div>

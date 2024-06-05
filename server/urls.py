@@ -26,6 +26,7 @@ urlpatterns = [
     path('catalog/', include('catalog.urls', namespace='catalog')),
     path('user/', include('user.urls', namespace='users')),
     path('chat/', include('chat.urls', namespace='chat')),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 

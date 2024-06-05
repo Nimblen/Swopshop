@@ -30,9 +30,9 @@
                                 <div class="product-img position-relative overflow-hidden">
                                     <img class="img-fluid w-100" src="{% if user.image %} {{ user.image.url }}  {% else %} {% static 'img/default_avatar.jpg' %} {% endif %}" alt="">
                                 </div>
+                                {% if user.is_authenticated %}
                                 <div class="input-group quantity mr-3" style="width: 130px; padding: 5px; padding-left: 25px;">
                                     <p class="align-middle">{{user.user_positive_rating.count}}</p>
-                                    
                                     {% if request.user in user.user_positive_rating.all %}
                                             <a class="btn btn-outline-dark btn-square " href="{% url 'users:positive_rating' user_id=user.id  %}"><i class="fa fa-arrow-alt-circle-up"></i></a>
                                             {% else %}
@@ -44,7 +44,8 @@
                                             <a class="btn btn-outline-dark btn-square" href="{% url 'users:negative_rating' user_id=user.id  %}"><i class="far fa-arrow-alt-circle-down"></i></a>
                                             {% endif %}
                                             <p class="align-middle">{{user.user_negative_rating.count}}</p>
-                                    </div>
+                                        </div>
+                                        {% endif %}
                             </div>
                         </div>
                     <div>

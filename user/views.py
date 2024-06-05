@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth, messages
@@ -65,7 +66,8 @@ def profile(request):
         "favorites": Item.objects.filter(favorites=request.user, active=True).exclude(
             seller=request.user
         ),
-        "exchanges": Exchange.objects.filter(sent_item__seller=request.user),
+        "accepted_exchanges": Exchange.objects.filter(Q(received_item__seller=request.user) | Q(sent_item__seller=request.user)),
+        "waiting_status": Exchange.objects.filter(received_item__seller=request.user, status="waiting")
     }
     return render(request, "user/checkout.html", context)
 

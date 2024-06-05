@@ -23,12 +23,6 @@ def get_categories():
 
 
 
-@register.simple_tag(name='get_items_by_category')
-def get_items_by_category(category="Прочее", user=None):
-    return Item.objects.filter(category__name=category, active=True).exclude(seller=user)
-
-
-
 
 @register.simple_tag(name='get_the_most_liked_items')
 def get_the_most_liked_items(user=None):

@@ -10,7 +10,7 @@
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
                     <a class="breadcrumb-item text-dark" href="{% url 'catalog:shop' %}">Shop</a>
-                    <span class="breadcrumb-item active">Shop Detail</span>
+                    <span class="breadcrumb-item active">{{item.name}}</span>
                 </nav>
             </div>
         </div>
@@ -160,13 +160,7 @@
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel related-carousel">
-                    {% if user.is_authenticated %}
-                    {% get_items_by_category item.category.name user=request.user as items %}
-                    {% else %}
-                    {% get_items_by_category item.category.name as items %}
-                    {% endif %}
-                    {% for item in items %}
-                    
+                    {% for item in items_by_category %}
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
                                 <img class="img-fluid" src="{% if item.images.all %}{{ item.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
