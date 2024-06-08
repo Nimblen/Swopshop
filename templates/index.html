@@ -3,129 +3,120 @@
 {% load shoptags %}
 
 {% block content %}
-
-
-
-    <!-- Featured Start -->
-    <div class="container-fluid pt-5">
-        <div class="row px-xl-5 pb-3">
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
-                    <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
-                    <h5 class="font-weight-semi-bold m-0">Quality Product</h5>
-                </div>
+<!-- Новая секция с особенностями -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5 pb-3 text-center">
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="bg-light shadow-sm rounded p-4 mb-4">
+                <h1 class="fa fa-check text-primary mb-3"></h1>
+                <h5 class="font-weight-semi-bold">Качественный продукт</h5>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
-                    <h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1>
-                    <h5 class="font-weight-semi-bold m-0">Free Shipping</h5>
-                </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="bg-light shadow-sm rounded p-4 mb-4">
+                <h1 class="fa fa-shipping-fast text-primary mb-3"></h1>
+                <h5 class="font-weight-semi-bold">Бесплатная доставка</h5>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
-                    <h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1>
-                    <h5 class="font-weight-semi-bold m-0">14-Day Return</h5>
-                </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="bg-light shadow-sm rounded p-4 mb-4">
+                <h1 class="fas fa-exchange-alt text-primary mb-3"></h1>
+                <h5 class="font-weight-semi-bold">Прямой обмен</h5>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
-                    <h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1>
-                    <h5 class="font-weight-semi-bold m-0">24/7 Support</h5>
-                </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="bg-light shadow-sm rounded p-4 mb-4">
+                <h1 class="fa fa-phone-volume text-primary mb-3"></h1>
+                <h5 class="font-weight-semi-bold">Поддержка 24/7</h5>
             </div>
         </div>
     </div>
-    <!-- Featured End -->
-    <div class="container-fluid pt-5">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Добро пожаловать на наш сайт обмена товаров и услуг!</span></h2>
-        <div class="row px-xl-5 pb-3">
+</div>
 
-        <p>Здесь вы можете зарегистрироваться, создать личный профиль и опубликовать объявление с описанием того, что хотите обменять.</p> <p>Просматривайте объявления других пользователей, оставляйте комментарии и предложения по обмену.</p> <p>Договаривайтесь о деталях обмена, обменивайтесь товарами или услугами, либо договаривайтесь о доставке товаров.</p> <p>Оценивайте других пользователей и их объявления, чтобы создать доверительные отношения.</p> 
+<!-- Раздел приветствия -->
+<div class="container-fluid pt-5">
+    <h2 class="section-title text-uppercase text-center mb-4"><span class="bg-secondary text-primary px-3 py-2 rounded">Добро пожаловать на наш сайт обмена товаров и услуг!</span></h2>
+    <div class="row px-xl-5 pb-3 text-center">
+        <div class="col-12">
+            <p class="lead">Здесь вы можете зарегистрироваться, создать личный профиль и опубликовать объявление с описанием того, что хотите обменять.</p>
+            <p class="lead">Просматривайте объявления других пользователей, оставляйте комментарии и предложения по обмену.</p>
+            <p class="lead">Договаривайтесь о деталях обмена, обменивайтесь товарами или услугами, либо договаривайтесь о доставке товаров.</p>
+            <p class="lead">Оценивайте других пользователей и их объявления, чтобы создать доверительные отношения.</p>
         </div>
     </div>
+</div>
 
 
-    <div class="container-fluid pt-5 pb-3">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">You might like it</span></h2>
-        <div class="row px-xl-5">
-            {% if user.is_authenticated %}
-            {% get_the_most_liked_items user=request.user as liked_items %}
-            {% else %}
-            {% get_the_most_liked_items as liked_items %}
-            {% endif %}
-            {% if liked_items %}
-            {% for item in liked_items %}
-            <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
-                <div class="product-item bg-light mb-4">
-                    <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid" src="{% if item.images.all %}{{ item.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
-                        {% if user.is_authenticated %}
-                        <div class="product-action">
-                            {% if request.user in item.likes.all %}
-                            <a class="btn btn-outline-dark btn-square " href="{% url 'catalog:like_item' item_id=item.id  %}"><i class="fa fa-heart "></i></a>
-                            {% else %}
-                            <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:like_item' item_id=item.id  %}"><i class="far fa-heart"></i></a>
-                            {% endif %}
-                            <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:exchange' received_item_id=item.id  %}"><i class="fa fa-sync-alt"></i></a>
-                            {% if request.user in item.favorites.all %}
-                            <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:favorite_item' item_id=item.id  %}"><i class="fa fa-star"></i></a>
-                            {% else %}
-                            <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:favorite_item' item_id=item.id  %}"><i class="far fa-star"></i></a>
-                            {% endif %}
-                        </div>
+<!-- Раздел последних объявлений -->
+<div class="container-fluid pt-5 pb-3">
+    <h2 class="section-title text-uppercase text-center mb-4"><span class="bg-secondary text-primary px-3 py-2 rounded">Последние объявления</span></h2>
+    <div class="row px-xl-5"> 
+        {% if user.is_authenticated %}
+        {% get_latest_items user=user as latest_items %}
+        {% else %}
+        {% get_latest_items as latest_items %}
+        {% endif %}
+        {% if latest_items %}
+        {% for item in latest_items %}
+        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+            <div class="product-item bg-light shadow-sm rounded mb-4">
+                <div class="product-img position-relative overflow-hidden rounded-top">
+                    <img class="img-fluid w-100" src="{% if item.images.all %}{{ item.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="">
+                    {% if user.is_authenticated %}
+                    <div class="product-action">
+                        {% if request.user in item.likes.all %}
+                        <a class="btn btn-outline-dark btn-square " href="{% url 'catalog:like_item' item_id=item.id  %}"><i class="fa fa-heart "></i></a>
+                        {% else %}
+                        <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:like_item' item_id=item.id  %}"><i class="far fa-heart"></i></a>
                         {% endif %}
-                    </div>                        
-                    <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="{{ item.seller.get_absolute_url }}">{{ item.seller }}</a>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <a class="h5 text-decoration-none text-truncate" href="{{ item.get_absolute_url }}">{{item.name}}</a>
-                        </div>
-                        <small>likes: {{ item.total_likes }}</small>
+                        <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:exchange' received_item_id=item.id  %}"><i class="fa fa-sync-alt"></i></a>
+                        {% if request.user in item.favorites.all %}
+                        <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:favorite_item' item_id=item.id  %}"><i class="fa fa-star"></i></a>
+                        {% else %}
+                        <a class="btn btn-outline-dark btn-square" href="{% url 'catalog:favorite_item' item_id=item.id  %}"><i class="far fa-star"></i></a>
+                        {% endif %}
                     </div>
+                    {% endif %}
                 </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <div class="col-12">
                 <div class="text-center py-4">
-                    <div class="h6 text-decoration-none text-truncate" href="">No lots yet</div>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-     <!-- Vendor Start -->
-    <div class="container-fluid py-5">
-        <div class="row px-xl-5">
-            <div class="col">
-                <div class="owl-carousel vendor-carousel">
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-1.jpg' %}" alt="">
+                    <a class="h6 text-decoration-none text-truncate" href="{{ item.seller.get_absolute_url }}">{{ item.seller }}</a>
+                    <div class="d-flex align-items-center justify-content-center mt-2">
+                        <a class="h5 text-decoration-none text-truncate" href="{{ item.get_absolute_url }}">{{item.name}}</a>
                     </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-2.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-3.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-4.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-5.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-6.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-7.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-8.jpg' %}" alt="">
-                    </div>
+                    <small>likes: {{ item.total_likes }}</small>
                 </div>
             </div>
         </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="text-center py-4">
+                <div class="h6 text-decoration-none text-truncate">Нет новых объявлений</div>
+            </div>
+        </div>
+        {% endif %}
     </div>
-    <!-- Vendor End -->
+</div>
+
+
+
+
+<!-- Раздел с контактной информацией -->
+<div class="container-fluid pt-5 pb-3">
+    <h2 class="section-title text-uppercase text-center mb-4"><span class="bg-secondary text-primary px-3 py-2 rounded">Контактная информация</span></h2>
+    <div class="row px-xl-5">
+        <div class="col-lg-4 mb-5">
+            <h5 class="font-weight-bold text-primary mb-3">Адрес</h5>
+            <p>123 Улица, Город, Страна</p>
+        </div>
+        <div class="col-lg-4 mb-5">
+            <h5 class="font-weight-bold text-primary mb-3">Email</h5>
+            <p>info@example.com</p>
+        </div>
+        <div class="col-lg-4 mb-5">
+            <h5 class="font-weight-bold text-primary mb-3">Телефон</h5>
+            <p>+012 345 6789</p>
+        </div>
+    </div>
+</div>
 {% endblock %}

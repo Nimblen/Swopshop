@@ -21,7 +21,7 @@
         <div class="row px-xl-5">
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
-            <h3> Your lots </h>
+            <h3> My lots </h>
                 {% if user.is_authenticated %}
                 {% if my_lots.count > 0 %}
                 <div class="pre-scrollable">
@@ -37,7 +37,7 @@
                             <div class="d-flex align-items-center justify-content-center mt-2">
                                 <a class="h5 text-decoration-none text-truncate" href="{{my_lot.get_absolute_url}}">{{my_lot.name}}</a>
                             </div>
-                            <small>likes: {{ my_lot.total_likes }}</small>
+                            <h6>likes: {{ my_lot.total_likes }}</h6>
                         </div>
                 </div>
                 {% endfor %}

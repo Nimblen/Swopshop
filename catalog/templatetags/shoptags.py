@@ -27,3 +27,9 @@ def get_categories():
 @register.simple_tag(name='get_the_most_liked_items')
 def get_the_most_liked_items(user=None):
     return Item.objects.filter(active=True).exclude(seller=user).order_by("-likes")[:4]
+
+
+
+@register.simple_tag()
+def get_latest_items(user=None):
+    return Item.objects.filter(active=True).exclude(seller=user).order_by("-date")[:4]

@@ -74,7 +74,8 @@ def profile(request):
 
 def user_details(request, username=None, user_id=None):
     user = get_object_or_404(User, username=username, pk=user_id)
-    context = {"user": user}
+    user_items = Item.objects.filter(seller=user, active=True)
+    context = {"user": user, "user_items": user_items}
     return render(request, "user/profile_for_users.html", context)
 
 

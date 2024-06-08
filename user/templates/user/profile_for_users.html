@@ -20,7 +20,7 @@
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-lg-8">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">User information</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">User information</span></h5>
     
                 
                 <div class="bg-light p-30 mb-5">
@@ -73,7 +73,7 @@
                 </div>
                 </div>
                 <div class="collapse mb-5 show ">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Lots and Reviews</span></h5>
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">Lots and Reviews</span></h5>
                     <div class="row px-xl-5">
                         <div class="col">
                             <div class="bg-light p-30">
@@ -94,14 +94,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="align-middle">
-                                                    {% for item in my_items %}
+                                                    {% for item in user_items %}
                                                     <tr>
                                                         <td  class="align-middle"><img src="{% if item.get_first_photo %}{{ item.get_first_photo }}{% else %}{% static 'img/default_item.jpg' %}{% endif %}" alt="" style="width: 50px;"></td>
                                                         <td class="align-middle"><a href="{{ item.get_absolute_url }}">{{ item.name }}</a></td>
                                                         <td class="align-middle">{{ item.type }}</td>
                                                         <td class="align-middle">{{ item.comments.count }}</td>
-                                                        <td class="align-middle"><a href="{% url 'catalog:delete_item' obj_id=item.id  %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
-                                                        <td class="align-middle"><button class="btn btn-sm btn-success"><i class="fa fa-edit"></i></button></td>
+                                                        
                                                     </tr>
                                                     {% endfor %}
                                                     
