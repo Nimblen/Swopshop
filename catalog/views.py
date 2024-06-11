@@ -22,7 +22,7 @@ def shop(request):
     page = request.GET.get("page", 1)
     sort_by = request.GET.get("sort_by", "-date")
     type_by = request.GET.get("type_by", "all")
-    per_page = request.GET.get("per_page", 10)
+    per_page = request.GET.get("per_page", 9)
     items = Item.objects.filter(active=True)
     if category:
         items = items.filter(category=category)
@@ -207,7 +207,7 @@ def search_view(request):
     page = request.GET.get("page", 1)
     sort_by = request.GET.get("sort_by", "-date")
     type_by = request.GET.get("type_by", "all")
-    per_page = request.GET.get("per_page", 10)
+    per_page = request.GET.get("per_page", 9)
     word = request.GET.get("q")
     items = None
     users = None

@@ -6,9 +6,9 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
-                    <a class="breadcrumb-item text-dark" href="{% url "catalog:shop" %}">Shop</a>
-                    <span class="breadcrumb-item active">Profile</span>
+                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Домой</a>
+                    <a class="breadcrumb-item text-dark" href="{% url "catalog:shop" %}">Каталог</a>
+                    <span class="breadcrumb-item active">Профиль</span>
                 </nav>
             </div>
         </div>
@@ -20,7 +20,7 @@
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-lg-8">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">My information</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">Моя информация</span></h5>
                 <form action="{% url 'users:profile' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                 
@@ -38,7 +38,7 @@
                         </div>
                         
                         <div class="col-md-6 form-group">
-                            <label>Username</label>
+                            <label>Имя пользователя</label>
                             {{ form.username }}
                         </div>
                         <div class="col-md-6 form-group">
@@ -46,41 +46,41 @@
                             {{ form.email }}
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>First Name</label>
+                            <label>Имя</label>
                             {{ form.first_name }}
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Last Name</label>
+                            <label>Фамилия</label>
                             {{ form.last_name }}
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Mobile No</label>
+                            <label>Номер телефона</label>
                             {{ form.phone_number }}
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Address</label>
+                            <label>Адрес</label>
                             {{ form.address }}
                         </div>
                         
                         <div class="col-md-6 form-group">
-                            <input type="submit" value="Save" class="btn btn-primary px-3">
+                            <input type="submit" value="Сохранить" class="btn btn-primary px-3">
                         </div>
                     </form>
                 
                     </div>
                 </div>
                 <div class="collapse mb-5 show ">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">Lots and exchanges</span></h5>
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">Лоты и Обмены</span></h5>
                     <div class="row px-xl-5">
                         <div class="col">
                             <div class="bg-light p-30">
                                 <div class="nav nav-tabs mb-4">
-                                    <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">My lots</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Favorite lots</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Waiting for confirmation</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-4">In progress</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-5">Exchange history</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-6">Reviews</a>
+                                    <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Мои лоты</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Избранные лоты</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Ожидание потверждение</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-4">В процессе</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-5">История обменов</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-6">Отзывы</a>
                                 </div>
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="tab-pane-1">
@@ -88,11 +88,11 @@
                                         <table class="table table-light table-borderless table-hover text-center mb-0">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th>Photo</th>
-                                                    <th>Name</th>
-                                                    <th>Type</th>
-                                                    <th>Comments</th>
-                                                    <th>Delete</th>
+                                                    <th>Фото</th>
+                                                    <th>Имя</th>
+                                                    <th>Тип</th>
+                                                    <th>Комментарии</th>
+                                                    <th>Удалить</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="align-middle">
@@ -115,11 +115,11 @@
                                         <table class="table table-light table-borderless table-hover text-center mb-0">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th>Photo</th>
-                                                    <th>Name</th>
-                                                    <th>Type</th>
-                                                    <th>Comments</th>
-                                                    <th>Delete</th>
+                                                    <th>Фото</th>
+                                                    <th>Имя</th>
+                                                    <th>Тип</th>
+                                                    <th>Комментарии</th>
+                                                    <th>Удалить</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="align-middle">
@@ -142,13 +142,13 @@
                                             <table class="table table-light table-borderless table-hover text-center mb-0">
                                                 <thead class="thead-dark">
                                                     <tr>
-                                                        <th>Sent item</th>
-                                                        <th>Received item</th>
-                                                        <th>User</th>
-                                                        <th>Status</th>
-                                                        <th>Message</th>
-                                                        <th>Refuse</th>
-                                                        <th>Accept</th>
+                                                        <th>Отправленный лот</th>
+                                                        <th>Получаемый лот</th>
+                                                        <th>Пользователь</th>
+                                                        <th>Статус</th>
+                                                        <th>Сообщение</th>
+                                                        <th>Отказать</th>
+                                                        <th>Принять</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="align-middle">
@@ -182,12 +182,13 @@
                                         <table class="table table-light table-borderless table-hover text-center mb-0">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th>Sent item</th>
-                                                    <th>Received item</th>
-                                                    <th>User</th>
-                                                    <th>Status</th>
-                                                    <th>Refuse</th>
-                                                    <th>Complete</th>
+                                                    <th>Отправленный лот</th>
+                                                    <th>Получаемый лот</th>
+                                                    <th>Пользователь</th>
+                                                    <th>Статус</th>
+                                                    <th>Сообщение</th>
+                                                    <th>Отказать</th>
+                                                    <th>Завершить</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="align-middle">
@@ -217,10 +218,10 @@
                                             <table class="table table-light table-borderless table-hover text-center mb-0">
                                                 <thead class="thead-dark">
                                                     <tr>
-                                                        <th>Sent item</th>
-                                                        <th>Received item</th>
-                                                        <th>User</th>
-                                                        <th>Status</th>
+                                                        <th>Отправленный лот</th>
+                                                        <th>Получаемый лот</th>
+                                                        <th>Пользователь</th>
+                                                        <th>Статус</th>
                                                         </tr>
                                                 </thead>
                                                 <tbody class="align-middle">
@@ -242,7 +243,7 @@
                                     <div class="tab-pane fade" id="tab-pane-6">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <h4 class="mb-4">{{ user.to_user.count }} review for "{{ user.username }}"</h4>
+                                                <h4 class="mb-4">{{ user.to_user.count }} Отзыв "{{ user.username }}"</h4>
                                                 <div class="pre-scrollable" >
             {% for comment in user.to_user.all %}
             
@@ -258,13 +259,13 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <h4 class="mb-4">Leave a review</h4>
-                                                <small>Your email address will not be published. Required fields are marked *</small>
+                                                <h4 class="mb-4">Оставить отзыв</h4>
+                                                <small>Ваш email адрес не будет опубликован. Поле отмечено *</small>
                                                 {% if user.is_authenticated %}                                    
                                                 <form action="{% url "users:add_comment" user_id=user.id %}" method="post" >
                                                     {% csrf_token %}
                                                     <div class="form-group">
-                                                        <label for="message">Your Review *</label>
+                                                        <label for="message">Ваш отзыв *</label>
                                                         <textarea name="user_review" id="message" cols="30" rows="5" class="form-control"></textarea>
                                                     </div>
                                                     <div class="form-group mb-0">
@@ -272,7 +273,7 @@
                                                     </div> 
                                                 </form>
                                                 {% else %}
-                                                <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Login to leave a review</a>
+                                                <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Зайдите чтобы оставить отзыв</a>
                                                 {% endif %}
                                             </div>
                                         </div>

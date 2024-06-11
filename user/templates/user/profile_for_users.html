@@ -6,9 +6,9 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
-                    <a class="breadcrumb-item text-dark" href="{% url "catalog:shop" %}">Shop</a>
-                    <span class="breadcrumb-item active">Profile</span>
+                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Домой</a>
+                    <a class="breadcrumb-item text-dark" href="{% url "catalog:shop" %}">Каталог</a>
+                    <span class="breadcrumb-item active">Профиль</span>
                 </nav>
             </div>
         </div>
@@ -20,7 +20,7 @@
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-lg-8">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">User information</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">Информация пользователя</span></h5>
     
                 
                 <div class="bg-light p-30 mb-5">
@@ -50,36 +50,36 @@
                         </div>
                     <div>
                         <div class="col-md-6 form-group">
-                            <label>Username</label>
+                            <label>Имя пользователя</label>
                             <strong>{{ user.username }}</strong>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>First Name</label>
+                            <label>Имя</label>
                             <strong>{{ user.first_name }}</strong>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Last Name</label>
+                            <label>Фамилия</label>
                             <strong>{{ user.last_name }}</strong>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Phone number</label>
+                            <label>Номар телефона</label>
                             <strong>{{ user.phone_number }}</strong>
                         </div>            
                         <div class="col-md-6 form-group">
-                            <label>Address</label>
+                            <label>Адрес</label>
                             <strong>{{ user.address }}</strong>
                         </div>
                     </div>
                 </div>
                 </div>
                 <div class="collapse mb-5 show ">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">Lots and Reviews</span></h5>
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary text-primary pr-3">Лоты и Отзывы</span></h5>
                     <div class="row px-xl-5">
                         <div class="col">
                             <div class="bg-light p-30">
                                 <div class="nav nav-tabs mb-4">
-                                    <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">User lots</a>
-                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Review</a>
+                                    <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Лоты пользователя</a>
+                                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Отзыв</a>
                                 </div>
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="tab-pane-1">
@@ -87,10 +87,10 @@
                                         <table class="table table-light table-borderless table-hover text-center mb-0">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th>Photo</th>
-                                                    <th>Name</th>
-                                                    <th>Type</th>
-                                                    <th>Comments</th>
+                                                    <th>Фото</th>
+                                                    <th>Имя</th>
+                                                    <th>Тип</th>
+                                                    <th>Комментарии</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="align-middle">
@@ -111,14 +111,14 @@
                                     <div class="tab-pane fade" id="tab-pane-2">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <h4 class="mb-4">{{ user.to_user.count }} review for "{{ user.username }}"</h4>
+                                                <h4 class="mb-4">{{ user.to_user.count }} Отзывы "{{ user.username }}"</h4>
                                                 <div class="pre-scrollable" >
             {% for comment in user.to_user.all %}
             
                                                 <div class="media mb-4">
                                                     <img src="{% if comment.user.image %} {{ comment.user.image.url }}{% else %} {% static 'img/default_avatar.jpg' %} {% endif %}" alt="Image" class="img-fluid1 mr-3 mt-1" style="width: 45px;">
                                                     <div class="media-body">
-                                                        <h6>{{ comment.from_user.username }}<small> - <i>{{ comment.created }}</i>{% if request.user == comment.from_user %} <a href="{% url "users:delete_comment" comment_id=comment.id  %}" class="btn-danger" >delete</a>{% endif %}</small></h6>
+                                                        <h6>{{ comment.from_user.username }}<small> - <i>{{ comment.created }}</i>{% if request.user == comment.from_user %} <a href="{% url "users:delete_comment" comment_id=comment.id  %}" class="btn-danger" >Удалить</a>{% endif %}</small></h6>
             
                                                         <p>{{comment.body}}</p>
                                                     </div>
@@ -127,13 +127,13 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <h4 class="mb-4">Leave a review</h4>
-                                                <small>Your email address will not be published. Required fields are marked *</small>
+                                                <h4 class="mb-4">Оставить отзыв</h4>
+                                                <small>Ваш email адрес не будет опубликован. Поле отмечено *</small>
                                                 {% if user.is_authenticated %}                                    
                                                 <form method="post" >
                                                     {% csrf_token %}
                                                     <div class="form-group">
-                                                        <label for="message">Your Review *</label>
+                                                        <label for="message">Оставить отзыв *</label>
                                                         <textarea name="user_review" id="message" cols="30" rows="5" class="form-control"></textarea>
                                                     </div>
                                                     <div class="form-group mb-0">
@@ -141,7 +141,7 @@
                                                     </div> 
                                                 </form>
                                                 {% else %}
-                                                <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Login to leave a review</a>
+                                                <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Зайдите чтобы оставить отзыв</a>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -156,18 +156,18 @@
                 
             </div>
             <div class="col-lg-4">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Exchange Total</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Обмены</span></h5>
                 <div class="bg-light p-30 mb-5">
                     <div class="border-bottom pt-3 pb-2">
         
                         <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Active exchanges</h6>
+                            <h6 class="font-weight-medium">Активные обмены</h6>
                             <h6 class="font-weight-medium">{{ user.active_deals }}</h6>
                         </div>
                     </div>
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
-                            <h5>Total number of exchanges</h5>
+                            <h5>Количество обменов</h5>
                             <h5>{{ user.amount_of_deals }}</h5>
                         </div>
                     </div>

@@ -60,13 +60,13 @@
                         {% url 'users:registration' as reg %}
                         <div class="tab-pane {% if request.path == reg %}active {% endif %}" id="tabs-1" role="tabpanel">
                             <div class="signin__form__text">
-                                <p>with your social network :</p>
+                                <p>Войти через аккаунт :</p>
                                 <div class="signin__form__signup__social">
                                     <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
                                     <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
                                     <a href="#" class="google"><i class="fa fa-google"></i></a>
                                 </div>
-                                <div class="divide">or</div>
+                                <div class="divide">или</div>
                                 {% if reg_form.errors %}
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert"
                                     style="margin-top: 50px;">
@@ -84,24 +84,24 @@
                                     {{ reg_form.password2 }}
                                     {{ reg_form.first_name }} {{ reg_form.last_name }}
                                     <label for="sign-agree-check">
-                                        I agree to the terms & conditions
+                                        я согласен с условиями пользовательского соглашения
                                         <input type="checkbox" id="sign-agree-check">
                                         <span class="checkmark"></span>
                                     </label>
-                                    <button type="submit" class="site-btn">Register Now</button>
+                                    <button type="submit" class="site-btn">Регистрация</button>
                                 </form>
                             </div>
                         </div>
                         {% url 'users:login' as log %}
                         <div class="tab-pane {% if request.path == log %}active {% endif %}" id="tabs-2" role="tabpanel">
                             <div class="signin__form__text">
-                                <p>with your social network :</p>
+                                <p>Войти через аккаунт :</p>
                                 <div class="signin__form__signup__social">
                                     <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
                                     <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
                                     <a href="#" class="google"><i class="fa fa-google"></i></a>
                                 </div>
-                                <div class="divide">or</div>
+                                <div class="divide">или</div>
                                 {% if messages or login_form.non_field_errors %}
                         <div class="alert
                         {% if messages %} alert-success {% else %} alert-warning {% endif %}
@@ -123,7 +123,7 @@
                                     {% csrf_token %}
                                     {{ login_form.username }}
                                     {{ login_form.password }}
-                                    <button type="submit" class="site-btn">Sign In</button>
+                                    <button type="submit" class="site-btn">Логин</button>
                                 </form>
                             </div>
                         </div>  

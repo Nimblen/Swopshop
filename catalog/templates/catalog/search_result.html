@@ -7,8 +7,8 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
-                    <span class="breadcrumb-item text-dark">Results</span>
+                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Домой</a>
+                    <span class="breadcrumb-item text-dark">Результаты</span>
                 </nav>
             </div>
         </div>
@@ -21,7 +21,7 @@
         <div class="row px-xl-5">
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
-            <h3> Users </h>
+            <h3> Пользователи </h>
                 {% if found_users %}
                 {% for user in found_users %}
                     <div class="product-item bg-light mb-4">
@@ -41,7 +41,7 @@
                 {% endfor %}
                 {% else  %}
                 <div class="text-center py-4">
-                    <div class="h6 text-decoration-none text-truncate" href="">No users</div>
+                    <div class="h6 text-decoration-none text-truncate" href="">Нет пользователей</div>
                 </div>
                 {% endif %}
   
@@ -52,37 +52,7 @@
             <!-- Shop Product Start -->
             <div class="col-lg-9 col-md-8">
                 <div class="row pb-3">
-                    <div class="col-12 pb-1">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-
-                            <div class="ml-2">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="?{% change_params sort_by="-date"%}">Latest</a>
-                                        <a class="dropdown-item" href="?{% change_params sort_by="date"%}">Oldest</a>
-                                    </div>
-                                </div>
-                                
-                                <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="?{% change_params per_page=10 %}">10</a>
-                                        <a class="dropdown-item" href="?{% change_params per_page=20 %}">20</a>
-                                        <a class="dropdown-item" href="?{% change_params per_page=30 %}">30</a>
-                                    </div>
-                                </div>
-                                <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Type</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="?{% change_params type_by="all" %}">all</a>
-                                        <a class="dropdown-item" href="?{% change_params type_by="item" %}">item</a>
-                                        <a class="dropdown-item" href="?{% change_params type_by="service" %}">service</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% include "catalog/includes/sorting.html" %} 
                     {% if found_items %}
                     {% for item in found_items %}
                     <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
@@ -106,7 +76,7 @@
                     {% else %}
                     <div class="col-12">
                         <div class="text-center py-4">
-                            <div class="h6 text-decoration-none text-truncate" href="">No results</div>
+                            <div class="h6 text-decoration-none text-truncate" href="">Нет результатов</div>
                         </div>
                     </div>
                     {% endif %}

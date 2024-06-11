@@ -5,9 +5,9 @@
     <div class="row px-xl-5">
         <div class="col-12">
             <nav class="breadcrumb bg-light mb-30">
-                <a class="breadcrumb-item text-dark" href="#">Home</a>
-                <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                <span class="breadcrumb-item active">Add lot</span>
+                <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Домой</a>
+                <a class="breadcrumb-item text-dark" href="{% url 'catalog:shop' %}">Каталог</a>
+                <span class="breadcrumb-item active">Добавть Лот</span>
             </nav>
         </div>
     </div>
@@ -16,7 +16,7 @@
 
 
     <div class="container-fluid">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary text-primary pr-3">Add lot</span></h2>
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary text-primary pr-3">Добавить Лот</span></h2>
         <div class="row px-xl-5">
             <div class="col-lg-7 mb-5"> 
                 <div class="contact-form bg-light p-30">
@@ -26,28 +26,28 @@
                     <form action="{% url 'catalog:add_item' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="control-group">
-                            <label>Lot name</label>
+                            <label>Название Лота</label>
                             {{ form.name }}
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group">
-                            <label>Category</label>
+                            <label>Категория</label>
                             {{ form.category}}
                     <p class="help-block text-danger"></p>
                     </div>
                         <div class="control-group">
-                            <label>Description</label>
+                            <label>Описание</label>
                             {{ form.description }}
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group">
-                            <label>Type</label>
+                            <label>Тип</label>
                             {{ form.type }}
                             <p class="help-block text-danger"></p>
                         </div>
                         <div>
-                            <button class="btn btn-primary py-2 px-4" type="submit" >Add 
-                                Lot</button>
+                            <button class="btn btn-primary py-2 px-4" type="submit" >Добавить 
+                                Лот</button>
                         </div>
                     
                 </div>

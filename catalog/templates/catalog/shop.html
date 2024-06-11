@@ -7,8 +7,8 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
-                    <span class="breadcrumb-item text-dark">Shop</span>
+                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Домой</a>
+                    <span class="breadcrumb-item text-dark">Каталог</span>
                 </nav>
             </div>
         </div>
@@ -21,7 +21,7 @@
         <div class="row px-xl-5">
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
-            <h3> My lots </h>
+            <h3> Мои лоты </h>
                 {% if user.is_authenticated %}
                 {% if my_lots.count > 0 %}
                 <div class="pre-scrollable">
@@ -37,21 +37,21 @@
                             <div class="d-flex align-items-center justify-content-center mt-2">
                                 <a class="h5 text-decoration-none text-truncate" href="{{my_lot.get_absolute_url}}">{{my_lot.name}}</a>
                             </div>
-                            <h6>likes: {{ my_lot.total_likes }}</h6>
+                            <h6>нравится: {{ my_lot.total_likes }}</h6>
                         </div>
                 </div>
                 {% endfor %}
                 </div>
                 {% else  %}
                 <div class="text-center py-4">
-                    <div class="h6 text-decoration-none text-truncate" href="">You have no lots</div>
+                    <div class="h6 text-decoration-none text-truncate" >У вас нет лотов</div>
                 </div>
                 {% endif %}
                 {% else %}
                 <div class="text-center py-4">
-                    <div class="h6 text-decoration-none text-truncate" href="">log in to add a lot</div>
+                    <div class="h6 text-decoration-none text-truncate" >Зайдите в аккаунт чтобы добавить лот</div>
                 </div>
-                <br><a href="{% url 'users:login' %}" class="btn btn-primary px-3">Login to add a lot</a>
+                <br><a href="{% url 'users:login' %}" class="btn btn-primary px-3">Зайти чтобы добавить лот</a>
                 {% endif %}  
             </div>
             <!-- Shop Sidebar End -->
@@ -60,44 +60,7 @@
             <!-- Shop Product Start -->
             <div class="col-lg-9 col-md-8">
                 <div class="row pb-3">
-                    <div class="col-12 pb-1">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-
-                            <div class="ml-2">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="?{% change_params sort_by="-date"%}">Latest</a>
-                                        <a class="dropdown-item" href="?{% change_params sort_by="date"%}">Oldest</a>
-                                        
-                                        <a class="dropdown-item" href="?{% change_params sort_by='-likes' %}">Rating (Descending)</a>
-                                   
-                                        <a class="dropdown-item" href="?{% change_params sort_by='likes' %}">Rating (Ascending)</a>
-                                  
-                                    
-                                    
-                                    </div>
-                                </div>
-                                
-                                <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="?{% change_params per_page=10 %}">10</a>
-                                        <a class="dropdown-item" href="?{% change_params per_page=20 %}">20</a>
-                                        <a class="dropdown-item" href="?{% change_params per_page=30 %}">30</a>
-                                    </div>
-                                </div>
-                                <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Type</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="?{% change_params type_by="all" %}">all</a>
-                                        <a class="dropdown-item" href="?{% change_params type_by="item" %}">item</a>
-                                        <a class="dropdown-item" href="?{% change_params type_by="service" %}">service</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% include "catalog/includes/sorting.html" %} 
                     {% if items %}
                     {% for item in items %}
                     <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
@@ -125,7 +88,7 @@
                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                     <a class="h5 text-decoration-none text-truncate" href="{{ item.get_absolute_url }}">{{item.name}}</a>
                                 </div>
-                                <small>likes: {{ item.total_likes }}</small>
+                                <small>нравится: {{ item.total_likes }}</small>
                             </div>
                         </div>
                     </div>
@@ -133,7 +96,7 @@
                     {% else %}
                     <div class="col-12">
                         <div class="text-center py-4">
-                            <div class="h6 text-decoration-none text-truncate" href="">No lots yet</div>
+                            <div class="h6 text-decoration-none text-truncate" href="">Еще нет лотов</div>
                         </div>
                     </div>
                     {% endif %}

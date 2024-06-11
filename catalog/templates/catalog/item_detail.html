@@ -8,8 +8,8 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
-                    <a class="breadcrumb-item text-dark" href="{% url 'catalog:shop' %}">Shop</a>
+                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Домой</a>
+                    <a class="breadcrumb-item text-dark" href="{% url 'catalog:shop' %}">Каталог</a>
                     <span class="breadcrumb-item active">{{item.name}}</span>
                 </nav>
             </div>
@@ -56,18 +56,18 @@
                         </div>
                         
                     </div>
-                    <small class="h6 text-decoration-none text-truncate">user rating:{{item.seller.user_rating}}</small><br>
-                    <small class="h6 text-decoration-none text-truncate">amount of deals: {{item.seller.amount_of_deals}}</small><br>
-                    <small class="h6 text-decoration-none text-truncate">type: {{item.type}}</small><br>
+                    <small class="h6 text-decoration-none text-truncate">рейтинг пользователя:{{item.seller.user_rating}}</small><br>
+                    <small class="h6 text-decoration-none text-truncate">количество дел: {{item.seller.amount_of_deals}}</small><br>
+                    <small class="h6 text-decoration-none text-truncate">тип: {{item.type}}</small><br>
                     <i class="far fa-heart"></i><span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">{{item.total_likes}}</span>
                     <p class="mb-4">{{ item.description }}</p>
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity mr-3" style="width: 130px;">
-                        <button class="btn btn-primary px-3" id="openChat" >Open Chat</button>
+                        <button class="btn btn-primary px-3" id="openChat" >Открыть чат</button>
                         </div>
                         {% if request.user != item.seller and user.is_authenticated %}
                         <div class="input-group quantity mr-3" style="width: 130px;">
-                            <a href="{% url 'catalog:exchange' received_item_id=item.id  %}"  class="btn btn-primary px-3"><i class="fa fa-sync-alt"></i> offer an exchange </a>
+                            <a href="{% url 'catalog:exchange' received_item_id=item.id  %}"  class="btn btn-primary px-3"><i class="fa fa-sync-alt"></i> Предложить обмен </a>
                         </div>
                         <div class="input-group quantity mr-3" style="width: 130px;">
                             {% if request.user in item.likes.all %}
@@ -82,11 +82,11 @@
                                     {% endif %}
                             </div>
                         {% elif request.user != item.seller %}
-                        <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Login to offer an exchange</a>
+                        <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Зайти в аккаунт чтобы предложить обмен</a>
                         {% endif %}
                     </div>
                     <div class="d-flex pt-2">
-                        <strong class="text-dark mr-2">Share on:</strong>
+                        <strong class="text-dark mr-2">поделится:</strong>
                         <div class="d-inline-flex">
                             <a class="text-dark px-2" href="">
                                 <i class="fab fa-facebook-f"></i>
@@ -111,7 +111,7 @@
                         <div class="tab-pane fade show active" id="tab-pane-3">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="mb-4">{{ item.comments.count }} review for "{{ item.name }}"</h4>
+                                    <h4 class="mb-4">{{ item.comments.count }} Отзыв  "{{ item.name }}"</h4>
                                     <div class="pre-scrollable" >
 {% for comment in item.comments.all %}
 
@@ -127,13 +127,13 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h4 class="mb-4">Leave a review</h4>
-                                    <small>Your email address will not be published. Required fields are marked *</small>
+                                    <h4 class="mb-4">Оставить отзыв</h4>
+                                    <small>Ваш email адрес не будет опубликован. Поле отмечено *</small>
                                     {% if user.is_authenticated %}                                    
                                     <form method="post" >
                                         {% csrf_token %}
                                         <div class="form-group">
-                                            <label for="message">Your Review *</label>
+                                            <label for="message">Ваш отзыв *</label>
                                             <textarea name="review" id="message" cols="30" rows="5" class="form-control"></textarea>
                                         </div>
                                         <div class="form-group mb-0">
@@ -141,7 +141,7 @@
                                         </div> 
                                     </form>
                                     {% else %}
-                                    <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Login to leave a review</a>
+                                    <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Зайти чтобы оставить отзыв</a>
                                     {% endif %}
                                 </div>
                             </div>
@@ -156,7 +156,7 @@
 
     <!-- Products Start -->
     <div class="container-fluid py-5">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">You May Also Like</span></h2>
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Вам может понравится</span></h2>
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel related-carousel">

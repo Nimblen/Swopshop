@@ -1,0 +1,39 @@
+{% load shoptags %}
+<div class="col-12 pb-1">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+
+        <div class="ml-2">
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Сортировка</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="?{% change_params sort_by="-date"%}">Последний</a>
+                    <a class="dropdown-item" href="?{% change_params sort_by="date"%}">Старые</a>
+                    
+                    <a class="dropdown-item" href="?{% change_params sort_by='-likes' %}">Рейтинг (по убыванию)</a>
+               
+                    <a class="dropdown-item" href="?{% change_params sort_by='likes' %}">Рейтинг (по возрастанию)</a>
+              
+                
+                
+                </div>
+            </div>
+            
+            <div class="btn-group ml-2">
+                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Показаны</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="?{% change_params per_page=9 %}">9</a>
+                    <a class="dropdown-item" href="?{% change_params per_page=18 %}">18</a>
+                    <a class="dropdown-item" href="?{% change_params per_page=36 %}">36</a>
+                </div>
+            </div>
+            <div class="btn-group ml-2">
+                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Тип</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="?{% change_params type_by="all" %}">Все</a>
+                    <a class="dropdown-item" href="?{% change_params type_by="item" %}">Предметы</a>
+                    <a class="dropdown-item" href="?{% change_params type_by="service" %}">Сервисы</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
